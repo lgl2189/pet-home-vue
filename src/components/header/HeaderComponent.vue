@@ -1,11 +1,26 @@
-<script setup></script>
+<script setup>
+import { userLogout } from '@/apis/user';
+import router from '@/router';
+import { useUserStore } from '@/stores/user';
+
+const userStore = useUserStore()
+
+const handleClickLogout = async () => {
+  const res = await userLogout(userStore.token)
+  if (res.status !== '200') {
+    console.log('logout failed')
+  }
+  router.push('/')
+  location.reload(true)
+}
+</script>
 <template>
   <div class="header">
     <div class="title">
       宠物之家
     </div>
     <div class="navigator">
-      <el-menu class="navigator-menu" mode="horizontal">
+      <el-menu class="navigator-menu" mode="horizontal" :ellipsis="true">
         <el-sub-menu index="1">
           <template #title>动物</template>
           <!-- 这里可以添加子菜单选项 -->
@@ -51,12 +66,40 @@
       </el-menu>
     </div>
     <div class="user">
+      <div class="user-avatar">
+        <el-icon :size="30">
+          <User />
+        </el-icon>
+      </div>
+      <!-- 已登录 -->
+      <div v-if="userStore.isLogin" class="user-login-wrap">
+        <el-menu mode="horizontal" class="user-login-menu" :ellipsis="false">
+          <el-sub-menu index="1">
+            <!-- TODO: 这里应该显示用户的昵称 -->
+            <template #title>{{ username }}</template>
+            <el-menu-item index="1-1">个人中心</el-menu-item>
+            <el-menu-item index="1-2" @click="handleClickLogout">
+              退出登录
+            </el-menu-item>
+          </el-sub-menu>
+        </el-menu>
+      </div>
+      <!-- 未登录 -->
+      <div v-else>
+        <router-link :to="{ name: 'UserRegistView' }">
+          <el-button size="large" :round="true">注册</el-button>
+        </router-link>
+        <span> / </span>
+        <router-link :to="{ name: 'UserLoginView' }">
+          <el-button size="large" :round="true">登录</el-button>
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
 <style lang="less" scoped>
 .header {
-  height: 60px;
+  height: 80px;
   width: 100%;
   background-color: #FFFFFF;
   color: #000000;
@@ -64,16 +107,56 @@
   display: flex;
   align-items: center;
   padding: 0 10px;
+  box-shadow: inset 0px -1px 0px #d0d0d0;
 
   .title {
     font-size: 24px;
     color: #00AEEC;
+    margin-left: 40px;
     margin-right: 20px;
+    flex-shrink: 0;
   }
 
-  .navigator {}
+  .navigator {
+    height: 100%;
+    flex-grow: 1;
+    flex-shrink: 1;
 
-  .user {}
+    .navigator-menu {
+      height: 100%;
+    }
+  }
+
+  .user {
+    height: 100%;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 30px;
+    color: #00AEEC;
+    margin-right: 20px;
+
+    .user-avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      width: 40px;
+      margin-right: 10px;
+    }
+
+    .user-login-wrap {
+      display: inline-flex;
+      flex-grow: 1;
+      height: 100%;
+
+      .user-login-menu {
+        height: 100%;
+      }
+    }
+  }
 
 }
 </style>

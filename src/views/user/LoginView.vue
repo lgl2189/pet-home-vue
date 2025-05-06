@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from "vue"
-import { useUserStore } from "@/stores/user"
 import { useRouter } from "vue-router"
 import { userLogin } from "@/apis/user"
 
@@ -33,13 +32,10 @@ const handleLogin = async () => {
           <el-input
             v-model="form.password"
             type="password"
-            placeholder="请输入密码"
-          ></el-input>
+            placeholder="请输入密码"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleLogin" class="login-button"
-            >登录</el-button
-          >
+          <el-button type="primary" @click="handleLogin" class="login-button">登录</el-button>
         </el-form-item>
       </el-form>
     </div>

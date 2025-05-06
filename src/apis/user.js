@@ -14,10 +14,25 @@ export const userLogin = async (username,password) => {
   return Promise.resolve(res)
 }
 
-export const userLogout = (token) => {
-  return request.post('/user/logout', { token })
+export const userLogout = async () => {
+  const res = await request.post('/user/logout')
+  const userStore = useUserStore()
+  userStore.removeToken()
+  return res;
 }
 
 export const userTokenVerify = () => {
   return request.get('/user/tokenVerify')
+}
+
+export const userRegist = (userInfo) =>{
+  return request.post('/user/regist',{
+    userName: userInfo.username,
+    userPassword: userInfo.password,
+    chinaId: userInfo.chinaId,
+    realName: userInfo.realName,
+    birthDate: userInfo.birthday,
+    phone: userInfo.phone,
+    email: userInfo.email,
+  })
 }

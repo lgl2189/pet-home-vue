@@ -21,7 +21,7 @@ onMounted(async () => {
 <template>
   <ElConfigProvider :size="size" :z-index="zIndex">
     <div id="app">
-      <div class="header-wrapper">
+      <div class="header-wrap">
         <HeaderComponent></HeaderComponent>
       </div>
       <router-view></router-view>
