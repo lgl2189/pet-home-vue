@@ -1,14 +1,15 @@
 import { useUserStore } from '@/stores/user'
 import request from '@/utils/request'
 
-export const userLogin = async (username,password) => {
+export const userLogin = async (username, password) => {
   const formData = new FormData()
-  formData.append('username',username)
-  formData.append('password',password)
-  const res = await request.post('/user/login', formData)
-  if(res.status === '200'){
+  formData.append('username', username)
+  formData.append('password', password)
+  const res = await request.post('/user/public/login', formData)
+  if (res.status === '200') {
     const userStore = useUserStore()
     userStore.token = res.data.token
+    userStore.userId = username
     userStore.isLogin = true
   }
   return Promise.resolve(res)
@@ -18,21 +19,25 @@ export const userLogout = async () => {
   const res = await request.post('/user/logout')
   const userStore = useUserStore()
   userStore.removeToken()
-  return res;
+  return res
 }
 
-export const userTokenVerify = () => {
-  return request.get('/user/tokenVerify')
+export const userLoginByToken = () => {
+  return request.post('/user/public/login/token')
 }
 
-export const userRegist = (userInfo) =>{
-  return request.post('/user/regist',{
-    userName: userInfo.username,
-    userPassword: userInfo.password,
-    chinaId: userInfo.chinaId,
-    realName: userInfo.realName,
-    birthDate: userInfo.birthday,
+export const userRegist = (userInfo) => {
+  return request.post('/user/public/regist', {
+    user_name: userInfo.username,
+    user_password: userInfo.password,
+    china_id: userInfo.chinaId,
+    real_name: userInfo.realName,
+    birth_date: userInfo.birthday,
     phone: userInfo.phone,
-    email: userInfo.email,
+    email: userInfo.email
   })
+}
+
+export const getUserInfo = (user_id) => {
+  return request.get(`/user/public/info/${user_id}`)
 }

@@ -1,24 +1,34 @@
-import { defineStore } from "pinia"
+import { defineStore } from 'pinia'
 
 const userTokenName = 'token'
+const userIdName = 'usedId'
 
 export const useUserStore = defineStore('user', {
   state: () => {
     return {
       token: localStorage.getItem(userTokenName) || '',
+      userId: localStorage.getItem(userIdName) || '',
       isLogin: false
     }
   },
   actions: {
-    autoSave(){
+    autoSave() {
       this.saveToken()
+      this.saveUserId()
     },
-    saveToken(){
-      localStorage.setItem(userTokenName,this.token)
+    saveToken() {
+      localStorage.setItem(userTokenName, this.token)
     },
-    removeToken(){
+    saveUserId() {
+      localStorage.setItem(userIdName, this.userId)
+    },
+    removeToken() {
       this.token = ''
       localStorage.removeItem(userTokenName)
+    },
+    removeUserId() {
+      this.userId = ''
+      localStorage.removeItem(userIdName)
     }
   }
 })

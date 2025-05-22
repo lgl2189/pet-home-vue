@@ -1,31 +1,67 @@
 <script setup>
-import { userLogout } from '@/apis/user';
-import router from '@/router';
-import { useUserStore } from '@/stores/user';
+  import { getUserInfo, userLogout } from '@/apis/user'
+  import router from '@/router'
+  import { useUserStore } from '@/stores/user'
+  import { onMounted, ref, watch } from 'vue'
 
-const userStore = useUserStore()
+  // 响应式对象
+  const userStore = useUserStore()
+  const userInfo = ref({
+    user_name: ''
+  })
 
-const handleClickLogout = async () => {
-  const res = await userLogout(userStore.token)
-  if (res.status !== '200') {
-    console.log('logout failed')
+  // 函数
+  const handleClickLogout = async () => {
+    const res = await userLogout(userStore.token)
+    if (res.status !== '200') {
+      console.log('logout failed')
+    }
+    router.push('/')
+    location.reload(true)
   }
-  router.push('/')
-  location.reload(true)
-}
+
+  const handleGetUserInfo = async () => {
+    if (userStore.isLogin === false) {
+      return
+    }
+    if (userStore.userId === '') {
+      console.error('用户id为空')
+      return
+    }
+    const res = await getUserInfo(userStore.userId)
+    if (res.status === '200') {
+      userInfo.value = res.data
+    }
+  }
+  // 监听器
+  watch(
+    () => userStore.isLogin,
+    async () => {
+      await handleGetUserInfo()
+    }
+  )
+  // 生命周期
+  onMounted(async () => {
+    await handleGetUserInfo()
+  })
 </script>
 <template>
   <div class="header">
     <div class="title">
-      宠物之家
+      <router-link :to="{ name: 'HomeView' }">宠物之家</router-link>
     </div>
     <div class="navigator">
       <el-menu class="navigator-menu" mode="horizontal" :ellipsis="true">
         <el-sub-menu index="1">
           <template #title>动物</template>
           <!-- 这里可以添加子菜单选项 -->
-          <el-menu-item index="1-1">动物列表</el-menu-item>
-          <el-menu-item index="1-2">动物详情</el-menu-item>
+          <el-menu-item index="1-1">
+            <router-link :to="{ name: 'AnimalUploadView' }">上传动物信息</router-link>
+          </el-menu-item>
+          <el-menu-item index="1-2">
+            <router-link :to="{ name: 'AnimalListView' }">动物列表</router-link>
+          </el-menu-item>
+          <el-menu-item index="1-3">动物详情</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="2">
           <template #title>救助</template>
@@ -74,13 +110,14 @@ const handleClickLogout = async () => {
       <!-- 已登录 -->
       <div v-if="userStore.isLogin" class="user-login-wrap">
         <el-menu mode="horizontal" class="user-login-menu" :ellipsis="false">
-          <el-sub-menu index="1">
-            <!-- TODO: 这里应该显示用户的昵称 -->
-            <template #title>{{ username }}</template>
+          <el-sub-menu index="1" :teleported="false">
+            <div class="user-login-menu-title">
+              <span>欢迎，</span>
+              <span>{{ userInfo.user_name }}</span>
+            </div>
+            <template #title>{{ userInfo.user_name }}</template>
             <el-menu-item index="1-1">个人中心</el-menu-item>
-            <el-menu-item index="1-2" @click="handleClickLogout">
-              退出登录
-            </el-menu-item>
+            <el-menu-item index="1-2" @click="handleClickLogout">退出登录</el-menu-item>
           </el-sub-menu>
         </el-menu>
       </div>
@@ -89,7 +126,7 @@ const handleClickLogout = async () => {
         <router-link :to="{ name: 'UserRegistView' }">
           <el-button size="large" :round="true">注册</el-button>
         </router-link>
-        <span> / </span>
+        <span>/</span>
         <router-link :to="{ name: 'UserLoginView' }">
           <el-button size="large" :round="true">登录</el-button>
         </router-link>
@@ -98,65 +135,71 @@ const handleClickLogout = async () => {
   </div>
 </template>
 <style lang="less" scoped>
-.header {
-  height: 80px;
-  width: 100%;
-  background-color: #FFFFFF;
-  color: #000000;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  padding: 0 10px;
-  box-shadow: inset 0px -1px 0px #d0d0d0;
-
-  .title {
-    font-size: 24px;
-    color: #00AEEC;
-    margin-left: 40px;
-    margin-right: 20px;
-    flex-shrink: 0;
-  }
-
-  .navigator {
-    height: 100%;
-    flex-grow: 1;
-    flex-shrink: 1;
-
-    .navigator-menu {
-      height: 100%;
-    }
-  }
-
-  .user {
-    height: 100%;
+  .header {
+    height: 80px;
+    width: 100%;
+    background-color: #ffffff;
+    color: #000000;
+    box-sizing: border-box;
     display: flex;
-    flex-shrink: 0;
     align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 30px;
-    color: #00AEEC;
-    margin-right: 20px;
+    padding: 0 10px;
+    box-shadow: inset 0px -1px 0px #d0d0d0;
 
-    .user-avatar {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: 40px;
-      width: 40px;
-      margin-right: 10px;
+    .title {
+      font-size: 24px;
+      color: #00aeec;
+      margin-left: 40px;
+      margin-right: 20px;
+      flex-shrink: 0;
     }
 
-    .user-login-wrap {
-      display: inline-flex;
-      flex-grow: 1;
+    .navigator {
       height: 100%;
+      flex-grow: 1;
+      flex-shrink: 1;
 
-      .user-login-menu {
+      .navigator-menu {
         height: 100%;
       }
     }
-  }
 
-}
+    .user {
+      height: 100%;
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 30px;
+      color: #00aeec;
+      margin-right: 20px;
+
+      .user-avatar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        width: 40px;
+        margin-right: 10px;
+      }
+
+      .user-login-wrap {
+        display: inline-flex;
+        flex-grow: 1;
+        height: 100%;
+
+        .user-login-menu {
+          height: 100%;
+
+          .user-login-menu-title {
+            box-sizing: border-box;
+            padding: 10px;
+            height: 40px;
+            font-size: 17px;
+          }
+        }
+      }
+    }
+  }
 </style>

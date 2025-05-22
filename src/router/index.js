@@ -1,3 +1,4 @@
+import { useUserStore } from '@/stores/user'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -5,12 +6,12 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-     name: 'HomeView',
-     component: () => import('@/views/home/HomeView.vue')
+      name: 'HomeView',
+      component: () => import('@/views/home/HomeView.vue')
     },
     {
       path: '/user',
-      children:[
+      children: [
         {
           path: 'login',
           name: 'UserLoginView',
@@ -22,8 +23,48 @@ const router = createRouter({
           component: () => import('@/views/user/RegistView.vue')
         }
       ]
+    },
+    {
+      path: '/animal',
+      meta: { requiresAuth: true },
+      children: [
+        {
+          path: 'upload',
+          name: 'AnimalUploadView',
+          component: () => import('@/views/animal/AnimalUploadView.vue')
+        },
+        {
+          path: 'list',
+          name: 'AnimalListView',
+          component: () => import('@/views/animal/AnimalListView.vue')
+        },
+        {
+          path: 'detail/:id',
+          name: 'AnimalDetailView',
+          component: () => import('@/views/animal/AnimalDetailView.vue')
+        }
+      ]
     }
   ]
+})
+
+// 全局前置守卫，检查路由访问权限
+router.beforeEach((to, _from, next) => {
+  const userStore = useUserStore()
+  // 检查路由是否需要身份验证
+  if (to.meta?.requiresAuth) {
+    // 检查用户是否已登录
+    if (userStore.isLogin) {
+      // 已登录，允许访问
+      next()
+    } else {
+      // 未登录，重定向到登录页面
+      next({ name: 'UserLoginView', query: { redirect: to.fullPath } })
+    }
+  } else {
+    // 不需要身份验证，直接访问
+    next()
+  }
 })
 
 export default router
