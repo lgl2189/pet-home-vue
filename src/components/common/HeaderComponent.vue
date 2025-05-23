@@ -2,7 +2,7 @@
   import { getUserInfo, userLogout } from '@/apis/user'
   import router from '@/router'
   import { useUserStore } from '@/stores/user'
-  import { onMounted, ref, watch } from 'vue'
+  import { onBeforeMount, ref, watch } from 'vue'
 
   // 响应式对象
   const userStore = useUserStore()
@@ -41,7 +41,7 @@
     }
   )
   // 生命周期
-  onMounted(async () => {
+  onBeforeMount(async () => {
     await handleGetUserInfo()
   })
 </script>
