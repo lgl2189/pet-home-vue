@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, onMounted, toRefs, nextTick, onBeforeUnmount } from 'vue'
+  import { ref, onMounted, toRefs, nextTick, onBeforeUnmount, onUpdated } from 'vue'
 
   const props = defineProps({
     items: {
@@ -123,6 +123,10 @@
       resizeObserver = new ResizeObserver(updateLayout)
       if (gridRef.value) resizeObserver.observe(gridRef.value)
     })
+  })
+
+  onUpdated(() => {
+    updateLayout()
   })
 
   onBeforeUnmount(() => {
