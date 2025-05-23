@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, onMounted, computed, defineProps, toRefs } from 'vue'
+  import { ref, onMounted, toRefs, nextTick, onBeforeUnmount } from 'vue'
 
   const props = defineProps({
     items: {
@@ -18,11 +18,16 @@
     maxColumn: {
       type: Number,
       default: 0 // 0 表示不限制
+    },
+    alignMode: {
+      type: String,
+      default: 'waterfall' // 'waterfall' 或 'grid'
     }
   })
 
-  const { minItemWidth, gap, maxColumn } = toRefs(props)
+  const { minItemWidth, gap, maxColumn, alignMode } = toRefs(props)
   const gridRef = ref(null)
+  let resizeObserver = null
 
   // 工具函数
   const formatValue = (value) => {
@@ -33,59 +38,97 @@
     return new Date(date).toLocaleDateString('zh-CN')
   }
 
-  onMounted(() => {
-    const updateLayout = () => {
-      const grid = gridRef.value
-      if (!grid) return
+  const updateLayout = () => {
+    if (gridRef.value) {
+      gridRef.value.style.overflow = 'hidden'
+      void gridRef.value.offsetHeight
+      gridRef.value.style.overflow = ''
+    }
 
-      const items = [...grid.children]
-      const gridWidth = grid.offsetWidth
+    const grid = gridRef.value
+    if (!grid) return
 
-      // 计算列数（基于minItemWidth最小值）
-      let columnCount = Math.floor((gridWidth + gap.value) / (minItemWidth.value + gap.value))
-      columnCount = Math.max(1, columnCount)
-      if (maxColumn.value > 0) columnCount = Math.min(columnCount, maxColumn.value)
+    const items = [...grid.children]
+    const gridWidth = grid.offsetWidth
 
-      // 计算实际列宽（可能大于minItemWidth）
-      const actualItemWidth = (gridWidth - (columnCount - 1) * gap.value) / columnCount
+    // 计算列数
+    let columnCount = Math.floor((gridWidth + gap.value) / (minItemWidth.value + gap.value))
+    columnCount = Math.max(1, columnCount)
+    if (maxColumn.value > 0) columnCount = Math.min(columnCount, maxColumn.value)
 
-      // 初始化布局参数
+    // 计算实际列宽
+    const actualItemWidth = (gridWidth - (columnCount - 1) * gap.value) / columnCount
+
+    if (alignMode.value === 'waterfall') {
+      // 瀑布流布局
       const columnsHeight = new Array(columnCount).fill(0)
-      const gapX = gap.value
-      const gapY = gap.value
-
       items.forEach((item) => {
-        // 移除之前的定位样式
         item.style.position = ''
         item.style.left = ''
         item.style.top = ''
-
-        // 强制同步布局计算
         void item.offsetHeight
 
-        // 找到最短列
         const minHeight = Math.min(...columnsHeight)
         const columnIndex = columnsHeight.indexOf(minHeight)
 
-        // 设置动态宽度和位置
         item.style.position = 'absolute'
-        item.style.left = `${columnIndex * (actualItemWidth + gapX)}px` // 动态计算
+        item.style.left = `${columnIndex * (actualItemWidth + gap.value)}px`
         item.style.top = `${columnsHeight[columnIndex]}px`
-        item.style.width = `${actualItemWidth}px` // 动态宽度
+        item.style.width = `${actualItemWidth}px`
 
-        // 更新列高度
-        columnsHeight[columnIndex] += item.offsetHeight + gapY
+        columnsHeight[columnIndex] += item.offsetHeight + gap.value
+      })
+      grid.style.height = `${Math.max(...columnsHeight) - gap.value}px`
+    } else if (alignMode.value === 'grid') {
+      // 网格布局
+      const rowHeights = []
+      items.forEach((item, index) => {
+        item.style.position = ''
+        item.style.left = ''
+        item.style.top = ''
+        void item.offsetHeight
+
+        const rowIndex = Math.floor(index / columnCount)
+        const itemHeight = item.offsetHeight
+
+        if (!rowHeights[rowIndex] || itemHeight > rowHeights[rowIndex]) {
+          rowHeights[rowIndex] = itemHeight
+        }
       })
 
-      // 设置容器高度
-      grid.style.height = `${Math.max(...columnsHeight) - gapY}px`
-    }
+      let accumulatedHeight = 0
+      items.forEach((item, index) => {
+        const rowIndex = Math.floor(index / columnCount)
+        const colIndex = index % columnCount
 
-    updateLayout()
-    window.addEventListener('resize', updateLayout)
+        item.style.position = 'absolute'
+        item.style.left = `${colIndex * (actualItemWidth + gap.value)}px`
+        item.style.top = `${accumulatedHeight}px`
+        item.style.width = `${actualItemWidth}px`
+
+        // 当处理完一行的最后一个元素时更新累计高度
+        if ((index + 1) % columnCount === 0 || index === items.length - 1) {
+          accumulatedHeight += rowHeights[rowIndex] + gap.value
+        }
+      })
+      grid.style.height = `${accumulatedHeight - gap.value}px`
+    } else {
+      console.error('Invalid alignMode value:', alignMode.value)
+    }
+  }
+
+  onMounted(() => {
+    nextTick(() => {
+      updateLayout()
+      resizeObserver = new ResizeObserver(updateLayout)
+      if (gridRef.value) resizeObserver.observe(gridRef.value)
+    })
+  })
+
+  onBeforeUnmount(() => {
+    if (resizeObserver) resizeObserver.disconnect()
   })
 </script>
-
 <template>
   <div class="data-grid" ref="gridRef">
     <div v-for="item in items" :key="item.id" class="grid-item">
