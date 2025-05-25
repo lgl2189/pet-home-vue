@@ -56,7 +56,7 @@
         <el-sub-menu index="1">
           <template #title>动物</template>
           <el-menu-item index="/animal/upload" :route="{ name: 'AnimalUploadView' }">上传动物信息</el-menu-item>
-          <el-menu-item index="/animal/list" :route="{ name: 'AnimalSearchView' }">搜索动物信息</el-menu-item>
+          <el-menu-item index="/animal/search" :route="{ name: 'AnimalSearchView' }">搜索动物信息</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="2">
           <template #title>救助</template>

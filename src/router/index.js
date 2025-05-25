@@ -34,7 +34,7 @@ const router = createRouter({
           component: () => import('@/views/animal/AnimalUploadView.vue')
         },
         {
-          path: 'list',
+          path: 'search',
           name: 'AnimalSearchView',
           component: () => import('@/views/animal/AnimalSearchView.vue')
         },
