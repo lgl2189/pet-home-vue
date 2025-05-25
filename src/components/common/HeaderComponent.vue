@@ -1,10 +1,11 @@
 <script setup>
   import { getUserInfo, userLogout } from '@/apis/user'
-  import router from '@/router'
   import { useUserStore } from '@/stores/user'
   import { onBeforeMount, ref, watch } from 'vue'
+  import { useRouter } from 'vue-router'
 
   // 响应式对象
+  const router = useRouter()
   const userStore = useUserStore()
   const userInfo = ref({
     user_name: ''
@@ -55,7 +56,7 @@
         <el-sub-menu index="1">
           <template #title>动物</template>
           <el-menu-item index="/animal/upload" :route="{ name: 'AnimalUploadView' }">上传动物信息</el-menu-item>
-          <el-menu-item index="/animal/list" :route="{ name: 'AnimalListView' }">动物列表</el-menu-item>
+          <el-menu-item index="/animal/list" :route="{ name: 'AnimalSearchView' }">搜索动物信息</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="2">
           <template #title>救助</template>

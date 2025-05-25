@@ -3,13 +3,12 @@
   import { useRouter } from 'vue-router'
   import { userLogin } from '@/apis/user'
 
+  const router = useRouter()
   const formRef = ref(null)
   const form = ref({
     username: '',
     password: ''
   })
-
-  const router = useRouter()
 
   const handleLogin = async () => {
     const response = await userLogin(form.value.username, form.value.password)
