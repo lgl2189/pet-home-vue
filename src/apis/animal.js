@@ -11,3 +11,16 @@ export const uploadAnimalInfo = (formData) => {
 export const getRecommendAnimalList = (num) => {
   return request.get(`/animal/info/recommend?num=${num}`)
 }
+
+/**
+ * 搜索动物信息
+ * @param {Array} keyArray - 搜索关键字数组
+ * @returns {Promise<AxiosResponse>} - 包含搜索结果动物信息的Promise
+ */
+export const searchAnimal = (keyArray, pageNum, pageSize) => {
+  return request.get('/animal/info/search', {
+    params: {
+      key: keyArray.join(',')
+    }
+  })
+}
