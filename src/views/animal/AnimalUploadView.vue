@@ -1,9 +1,10 @@
 <script setup>
   import { ref, reactive, onMounted } from 'vue'
-  import { ElMessage } from 'element-plus'
   import { getRescueStationList } from '@/apis/rescueStation'
   import { uploadAnimalInfo } from '@/apis/animal'
+  import { useRouter } from 'vue-router'
   // 响应式对象
+  const router = useRouter()
   const formRef = ref(null)
   const stationSelectOptionRef = ref(null)
   const animalInfo = reactive({
@@ -63,12 +64,13 @@
         // 这里应调用API上传数据
         const res = await handleUploadAnimalInfo(animalInfo)
         if (res.status === '200') {
-          ElMessage('表单提交成功')
+          ElMessage.success('表单提交成功')
+          router.push('/')
         } else {
-          ElMessage('表单提交失败，请检查网络或联系管理员')
+          ElMessage.error('表单提交失败，请检查网络或联系管理员')
         }
       } else {
-        ElMessage('表单验证失败，请检查必填项')
+        ElMessage.warning('表单验证失败，请检查必填项')
         return false
       }
     })
