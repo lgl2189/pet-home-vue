@@ -129,7 +129,7 @@
                 :animal="{
                   name: item.name,
                   age: item.age,
-                  imageUrl: item.img_url_list[0],
+                  imageUrl: item.img_url_list ? item.img_url_list[0] : '',
                   description: item.description,
                   type: item.species,
                   breed: item.breed

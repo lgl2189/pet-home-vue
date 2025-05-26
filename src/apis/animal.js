@@ -26,3 +26,11 @@ export const searchAnimal = (keyArray, pageNum, pageSize) => {
     }
   })
 }
+/**
+ * 获取动物详情信息
+ * @param {Number} animalId - 动物id
+ * @returns {Promise<AxiosResponse>} - 包含动物详情信息的Promise
+ */
+export const getAnimalInfoById = (animalId) => {
+  return request.get(`/animal/info/${animalId}`)
+}
