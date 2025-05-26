@@ -10,10 +10,15 @@
   const animalDataSearchValue = ref(null)
   const animalDataList = ref([])
   const pageInfo = ref({
+    // 当前页序号
     page_num_now: 1,
+    // 总页数
     page_num_total: 1,
+    // 当前页的记录数
     page_size_now: 1,
+    // 每页的记录数
     page_size: 20,
+    // 总记录数
     record_num: 1
   })
   // 函数
@@ -66,7 +71,8 @@
     router.push({
       query: {
         ...route.query,
-        pageNum: pageInfo.value.page_num_now
+        pageNum: pageInfo.value.page_num_now,
+        pageSize: pageInfo.value.page_size
       }
     })
   }
@@ -123,7 +129,7 @@
                 :animal="{
                   name: item.name,
                   age: item.age,
-                  imageUrl: 'http://localhost:8080/resource/image/5da7ca80-6f9a-40e2-873a-e1323f591364.jpeg',
+                  imageUrl: item.img_url_list[0],
                   description: item.description,
                   type: item.species,
                   breed: item.breed
