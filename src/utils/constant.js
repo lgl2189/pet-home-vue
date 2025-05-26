@@ -2,3 +2,7 @@
 export const HEDAER_KEY = {
   USER_TOKEN: 'token'
 }
+export const SEARCH_CONSTANT = {
+  DEFAUTL_PAGE_SIZE: 20,
+  DEFAULT_PAGE_NUM_NOW: 1
+}

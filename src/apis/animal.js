@@ -20,7 +20,9 @@ export const getRecommendAnimalList = (num) => {
 export const searchAnimal = (keyArray, pageNum, pageSize) => {
   return request.get('/animal/info/search', {
     params: {
-      key: keyArray.join(',')
+      key: keyArray.join(','),
+      pageNum: pageNum,
+      pageSize: pageSize
     }
   })
 }
