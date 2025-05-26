@@ -10,7 +10,11 @@
     modelValue: { type: Number, required: true }
   })
 
-  const emit = defineEmits(['update:modelValue'])
+  // 定义事件
+  // update:modelValue 用于双向绑定
+  // change 用于触发页码点击事件
+  // jump 用于触发跳转事件
+  const emit = defineEmits(['update:modelValue', 'change', 'jump'])
 
   const currentPage = computed({
     get: () => props.modelValue,
@@ -67,6 +71,7 @@
     if (page !== '...' && page !== currentPage.value) {
       currentPage.value = page
     }
+    emit('change', page)
   }
 
   // 处理跳转
@@ -75,6 +80,7 @@
     if (!isNaN(page)) {
       currentPage.value = page
       inputPage.value = ''
+      emit('jump', page)
     }
   }
 </script>
