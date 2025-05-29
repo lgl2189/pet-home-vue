@@ -1,5 +1,5 @@
 <script setup>
-  import { getUserInfo, userLogout } from '@/apis/user'
+  import { getPublicUserInfo, userLogout } from '@/apis/user'
   import { useUserStore } from '@/stores/user'
   import { onBeforeMount, ref, watch } from 'vue'
   import { useRouter } from 'vue-router'
@@ -21,7 +21,7 @@
     location.reload()
   }
 
-  const handleGetUserInfo = async () => {
+  const handleGetPublicUserInfo = async () => {
     if (userStore.isLogin === false) {
       return
     }
@@ -29,7 +29,7 @@
       console.error('用户id为空')
       return
     }
-    const res = await getUserInfo(userStore.userId)
+    const res = await getPublicUserInfo(userStore.userId)
     if (res.status === '200') {
       userInfo.value = res.data
     }
@@ -38,12 +38,12 @@
   watch(
     () => userStore.isLogin,
     async () => {
-      await handleGetUserInfo()
+      await handleGetPublicUserInfo()
     }
   )
   // 生命周期
   onBeforeMount(async () => {
-    await handleGetUserInfo()
+    await handleGetPublicUserInfo()
   })
 </script>
 <template>
@@ -98,15 +98,15 @@
       </div>
       <!-- 已登录 -->
       <div v-if="userStore.isLogin" class="user-login-wrap">
-        <el-menu mode="horizontal" class="user-login-menu" :ellipsis="false">
+        <el-menu mode="horizontal" class="user-login-menu" :ellipsis="false" router>
           <el-sub-menu index="1" :teleported="false">
             <div class="user-login-menu-title">
               <span>欢迎，</span>
               <span>{{ userInfo.user_name }}</span>
             </div>
             <template #title>{{ userInfo.user_name }}</template>
-            <el-menu-item index="1-1">个人中心</el-menu-item>
-            <el-menu-item index="1-2" @click="handleClickLogout">退出登录</el-menu-item>
+            <el-menu-item index="/user/center">用户中心</el-menu-item>
+            <el-menu-item index="/user/logout" @click="handleClickLogout">退出登录</el-menu-item>
           </el-sub-menu>
         </el-menu>
       </div>

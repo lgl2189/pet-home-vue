@@ -15,12 +15,37 @@ const router = createRouter({
         {
           path: 'login',
           name: 'UserLoginView',
+          meta: { notLogin: true },
           component: () => import('@/views/user/LoginView.vue')
         },
         {
           path: 'regist',
           name: 'UserRegistView',
           component: () => import('@/views/user/RegistView.vue')
+        },
+        {
+          path: 'center',
+          name: 'UserCenterView',
+          component: () => import('@/views/user/UserCenterView.vue'),
+          meta: { requiresAuth: true },
+          redirect: { name: 'UserInfoView' },
+          children: [
+            {
+              path: 'info',
+              name: 'UserInfoView',
+              component: () => import('@/views/user/UserInfoView.vue')
+            },
+            {
+              path: 'authority',
+              name: 'UserAuthorityView',
+              component: () => import('@/views/user/UserAuthorityView.vue')
+            },
+            {
+              path: 'volunteer',
+              name: 'UserVolunteerView',
+              component: () => import('@/views/user/UserVolunteerView.vue')
+            }
+          ]
         }
       ]
     },
@@ -51,6 +76,11 @@ const router = createRouter({
 // 全局前置守卫，检查路由访问权限
 router.beforeEach((to, _from, next) => {
   const userStore = useUserStore()
+  // 检查是否为未登录才可访问页面
+  if (to.meta?.notLogin && userStore.isLogin) {
+    next({ name: 'HomeView' })
+    return
+  }
   // 检查路由是否需要身份验证
   if (to.meta?.requiresAuth) {
     // 检查用户是否已登录
