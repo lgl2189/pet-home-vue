@@ -38,6 +38,19 @@ export const userRegist = (userInfo) => {
   })
 }
 
-export const getUserInfo = (user_id) => {
+export const getPublicUserInfo = (user_id) => {
   return request.get(`/user/public/info/${user_id}`)
+}
+
+export const getUserInfo = (userId) => {
+  return request.get(`/user/info/${userId}`)
+}
+
+export const updateUserInfo = (userId, userInfo) => {
+  return request.put(`/user/info/${userId}`, {
+    user_name: userInfo.user_name,
+    birth_date: userInfo.birth_date,
+    phone: userInfo.phone,
+    email: userInfo.email
+  })
 }

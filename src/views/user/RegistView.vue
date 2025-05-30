@@ -106,6 +106,8 @@
           <el-date-picker
             v-model="form.birthday"
             type="date"
+            format="YYYY-MM-DD"
+            value-format="YYYY-MM-DD"
             placeholder="请选择出生日期"
             :disabled-date="disabledDate"></el-date-picker>
         </el-form-item>
