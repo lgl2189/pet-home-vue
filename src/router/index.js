@@ -27,7 +27,7 @@ const router = createRouter({
           path: 'center',
           name: 'UserCenterView',
           component: () => import('@/views/user/UserCenterView.vue'),
-          meta: { requiresAuth: true },
+          meta: { requiresAuth: true, activePath: '/user/center' },
           redirect: { name: 'UserInfoView' },
           children: [
             {

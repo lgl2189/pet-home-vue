@@ -52,7 +52,12 @@
       <router-link :to="{ name: 'HomeView' }">宠物之家</router-link>
     </div>
     <div class="navigator">
-      <el-menu class="navigator-menu" mode="horizontal" :ellipsis="true" :router="true" :default-active="$route.path">
+      <el-menu
+        class="navigator-menu"
+        mode="horizontal"
+        :ellipsis="true"
+        :router="true"
+        :default-active="$route.meta.activePath || $route.path">
         <el-sub-menu index="1">
           <template #title>动物</template>
           <el-menu-item index="/animal/upload" :route="{ name: 'AnimalUploadView' }">上传动物信息</el-menu-item>
@@ -98,7 +103,12 @@
       </div>
       <!-- 已登录 -->
       <div v-if="userStore.isLogin" class="user-login-wrap">
-        <el-menu mode="horizontal" class="user-login-menu" :ellipsis="false" router>
+        <el-menu
+          mode="horizontal"
+          class="user-login-menu"
+          :ellipsis="false"
+          :router="true"
+          :default-active="$route.meta.activePath || $route.path">
           <el-sub-menu index="1" :teleported="false">
             <div class="user-login-menu-title">
               <span>欢迎，</span>
