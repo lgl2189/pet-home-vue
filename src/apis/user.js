@@ -63,3 +63,7 @@ export const updateUserRoleList = (userId, roleList) => {
   const roleArray = Array.of(...roleList)
   return request.post(`/user/${userId}/role`, roleArray)
 }
+
+export const getVolunteerInfo = (userId) => {
+  return request.get(`/user/${userId}/volunteer`)
+}

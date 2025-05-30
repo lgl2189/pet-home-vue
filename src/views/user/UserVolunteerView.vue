@@ -1,16 +1,41 @@
 <script setup>
-  import { ref, computed } from 'vue'
+  import { getVolunteerInfo } from '@/apis/user'
+  import { useUserStore } from '@/stores/user'
+  import { onBeforeMount, ref } from 'vue'
 
-  // Mock 志愿者数据（需从 volunteer 表获取）
+  // 响应式变量
+  const userStore = useUserStore()
   const volunteerInfo = ref({
     volunteer_id: 1,
     user_id: 1,
     rescue_station_id: 1,
     point: 200
   })
+  const rescueStationInfo = ref({
+    rescue_station_id: 1,
+    rescue_station_name: '',
+    position: '',
+    admin_user_id: 1,
+    admin_user_id: 1,
+    admin_user_name: '',
+    admin_birth_date: '',
+    admin_phone: '',
+    admin_email: ''
+  })
 
-  // Mock 救助站名称（需从 rescue_station 表关联获取）
-  const rescueStationName = ref('阳光流浪动物救助站')
+  // 函数
+  const handleGetVolunteerInfo = async () => {
+    const res = await getVolunteerInfo(userStore.userId)
+    if (res.status === '200') {
+      volunteerInfo.value = res.data.volunteer_info
+      rescueStationInfo.value = res.data.volunteer_info.rescue_station_info
+    }
+  }
+
+  // 生命周期函数
+  onBeforeMount(async () => {
+    await handleGetVolunteerInfo()
+  })
 </script>
 <template>
   <div class="volunteer-page">
@@ -22,7 +47,7 @@
       </div>
       <div class="card-item">
         <span>所属救助站：</span>
-        <span>{{ rescueStationName }}</span>
+        <span>{{ rescueStationInfo.rescue_station_name }}</span>
       </div>
       <div class="card-item">
         <span>累计积分：</span>
