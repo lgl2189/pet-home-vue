@@ -1,36 +1,52 @@
 <script setup>
-  import { ref } from 'vue'
+  import { getRoleList } from '@/apis/role'
+  import { getUserRoleList, updateUserRoleList } from '@/apis/user'
+  import { useUserStore } from '@/stores/user'
+  import { onBeforeMount, ref } from 'vue'
 
-  // Mock 角色数据（需替换为实际请求）
-  const roles = ref([
-    { role_id: 1, role_name: '超级管理员' },
-    { role_id: 2, role_name: '救助站管理员' },
-    { role_id: 3, role_name: '志愿者' },
-    { role_id: 4, role_name: '领养者' },
-    { role_id: 5, role_name: '捐赠者' },
-    { role_id: 6, role_name: '普通用户' }
-  ])
+  // 响应式变量
+  const userStore = useUserStore()
+  const roleList = ref([])
+  const selectedRoleList = ref()
 
-  // Mock 用户当前角色（需从数据库 user_role 表获取）
-  const userRoles = ref([2, 3]) // 假设用户同时拥有管理员和志愿者角色
-  const selectedRoles = ref(userRoles.value)
-
-  // 保存权限修改（调用 mock 接口）
-  const saveRoles = () => {
-    console.log('保存角色:', selectedRoles.value)
-    // 此处添加保存逻辑（更新 user_role 表）
+  // 函数
+  const handleGetRoleList = async () => {
+    const res = await getRoleList()
+    if (res.status === '200') {
+      roleList.value = res.data.role_list
+    }
   }
+  const handleGetUserRoleList = async () => {
+    const res = await getUserRoleList(userStore.userId)
+    if (res.status === '200') {
+      selectedRoleList.value = res.data.role_list.map((role) => role.role_tag)
+    }
+  }
+  const handleUpdateUserRoleList = async () => {
+    const res = await updateUserRoleList(userStore.userId, selectedRoleList.value)
+    if (res.status === '200') {
+      ElMessage.success('权限修改成功')
+    }
+  }
+  const saveRoleList = async () => {
+    await handleUpdateUserRoleList()
+  }
+  // 生命周期函数
+  onBeforeMount(async () => {
+    await handleGetRoleList()
+    await handleGetUserRoleList()
+  })
 </script>
 <template>
   <div class="authority-page">
     <h2 class="page-title">权限管理</h2>
     <div class="role-list">
-      <div v-for="role in roles" :key="role.role_id" class="role-item">
-        <input type="checkbox" :id="`role-${role.role_id}`" v-model="selectedRoles" :value="role.role_id" />
+      <div v-for="role in roleList" :key="role.role_id" class="role-item">
+        <input type="checkbox" :id="`role-${role.role_id}`" v-model="selectedRoleList" :value="role.role_tag" />
         <label :for="`role-${role.role_id}`">{{ role.role_name }}</label>
       </div>
     </div>
-    <button @click="saveRoles">保存权限</button>
+    <button @click="saveRoleList">保存权限</button>
   </div>
 </template>
 <style lang="less" scoped>
