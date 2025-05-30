@@ -59,39 +59,36 @@
         :router="true"
         :default-active="$route.meta.activePath || $route.path">
         <el-sub-menu index="1">
-          <template #title>动物</template>
-          <el-menu-item index="/animal/upload" :route="{ name: 'AnimalUploadView' }">上传动物信息</el-menu-item>
-          <el-menu-item index="/animal/search" :route="{ name: 'AnimalSearchView' }">搜索动物信息</el-menu-item>
+          <template #title>救助</template>
+          <el-menu-item index="/rescue/upload" :route="{ name: 'AnimalUploadView' }">上传动物信息</el-menu-item>
+          <el-menu-item index="/rescue/search" :route="{ name: 'AnimalSearchView' }">搜索动物信息</el-menu-item>
+          <el-menu-item index="1-3">救助流程</el-menu-item>
+          <el-menu-item index="1-4">救助案例</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="2">
-          <template #title>救助</template>
-          <el-menu-item index="2-1">救助流程</el-menu-item>
-          <el-menu-item index="2-2">救助案例</el-menu-item>
+          <template #title>领养</template>
+          <el-menu-item index="2-1">可领养动物</el-menu-item>
+          <el-menu-item index="2-2">领养申请</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="3">
-          <template #title>领养</template>
-          <el-menu-item index="3-1">可领养动物</el-menu-item>
-          <el-menu-item index="3-2">领养申请</el-menu-item>
+          <template #title>志愿者</template>
+          <el-menu-item index="3-1">志愿者招募</el-menu-item>
+          <el-menu-item index="3-2">志愿者活动</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="4">
-          <template #title>志愿者</template>
-          <el-menu-item index="4-1">志愿者招募</el-menu-item>
-          <el-menu-item index="4-2">志愿者活动</el-menu-item>
+          <template #title>捐赠</template>
+          <el-menu-item index="4-1">捐赠方式</el-menu-item>
+          <el-menu-item index="4-2">捐赠记录</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="5">
-          <template #title>捐赠</template>
-          <el-menu-item index="5-1">捐赠方式</el-menu-item>
-          <el-menu-item index="5-2">捐赠记录</el-menu-item>
+          <template #title>展示</template>
+          <el-menu-item index="5-1">图片展示</el-menu-item>
+          <el-menu-item index="5-2">视频展示</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="6">
-          <template #title>展示</template>
-          <el-menu-item index="6-1">图片展示</el-menu-item>
-          <el-menu-item index="6-2">视频展示</el-menu-item>
-        </el-sub-menu>
-        <el-sub-menu index="7">
           <template #title>数据</template>
-          <el-menu-item index="7-1">统计数据</el-menu-item>
-          <el-menu-item index="7-2">数据报表</el-menu-item>
+          <el-menu-item index="6-1">统计数据</el-menu-item>
+          <el-menu-item index="6-2">数据报表</el-menu-item>
         </el-sub-menu>
       </el-menu>
     </div>

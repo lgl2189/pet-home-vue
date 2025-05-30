@@ -50,23 +50,23 @@ const router = createRouter({
       ]
     },
     {
-      path: '/animal',
+      path: '/rescue',
       meta: { requiresAuth: true },
       children: [
         {
           path: 'upload',
           name: 'AnimalUploadView',
-          component: () => import('@/views/animal/AnimalUploadView.vue')
+          component: () => import('@/views/rescue/AnimalUploadView.vue')
         },
         {
           path: 'search',
           name: 'AnimalSearchView',
-          component: () => import('@/views/animal/AnimalSearchView.vue')
+          component: () => import('@/views/rescue/AnimalSearchView.vue')
         },
         {
           path: 'detail/:id',
           name: 'AnimalDetailView',
-          component: () => import('@/views/animal/AnimalDetailView.vue')
+          component: () => import('@/views/rescue/AnimalDetailView.vue')
         }
       ]
     }
