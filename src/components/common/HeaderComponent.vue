@@ -61,12 +61,12 @@
         <el-sub-menu index="1">
           <template #title>救助</template>
           <el-menu-item index="/rescue/regist" :route="{ name: 'RescueRegistView' }">救助登记</el-menu-item>
-          <el-menu-item index="/rescue/search" :route="{ name: 'AnimalSearchView' }">搜索动物信息</el-menu-item>
+          <el-menu-item index="/rescue/search" :route="{ name: 'AnimalSearchView' }">动物列表</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="2">
           <template #title>领养</template>
-          <el-menu-item index="2-1">可领养动物</el-menu-item>
-          <el-menu-item index="2-2">领养申请</el-menu-item>
+          <el-menu-item index="/adopt/list">可领养动物列表</el-menu-item>
+          <el-menu-item index="/adopt/apply">领养申请</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="3">
           <template #title>志愿者</template>
