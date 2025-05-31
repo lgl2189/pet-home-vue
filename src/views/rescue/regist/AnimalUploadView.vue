@@ -57,23 +57,23 @@
   })
   // 函数
   const submitForm = () => {
-    // formRef.value.validate(async (valid) => {
-    //   if (valid) {
-    //     const res = await handleUploadAnimalInfo(animalInfo)
-    //     if (res.status === '200') {
-    //       ElMessage.success('表单提交成功')
-    //       emits('animal-upload-success', res.data.animal_info)
-    //       return true
-    //     } else {
-    //       ElMessage.error('表单提交失败，请检查网络或联系管理员')
-    //     }
-    //   } else {
-    //     ElMessage.warning('表单验证失败，请检查必填项')
-    //     return false
-    //   }
-    // })
-    emits('animal-upload-success', { animal_id: 1 })
-    return true
+    formRef.value.validate(async (valid) => {
+      if (valid) {
+        const res = await handleUploadAnimalInfo(animalInfo)
+        if (res.status === '200') {
+          ElMessage.success('表单提交成功')
+          emits('animal-upload-success', res.data.animal_info)
+          return true
+        } else {
+          ElMessage.error('表单提交失败，请检查网络或联系管理员')
+        }
+      } else {
+        ElMessage.warning('表单验证失败，请检查必填项')
+        return false
+      }
+    })
+    // emits('animal-upload-success', { animal_id: 1 })
+    // return true
   }
   const handleUploadAnimalInfo = () => {
     const formData = new FormData()

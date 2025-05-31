@@ -2,7 +2,8 @@
   import { ref, reactive, onMounted, onBeforeMount } from 'vue'
   import { ElMessage } from 'element-plus'
   import { useRouter } from 'vue-router'
-  import { getRescueStationList, uploadRescueRecord } from '@/apis/rescue'
+  import { getRescueStationList, addRescueRecord } from '@/apis/rescue'
+  import { useUserStore } from '@/stores/user'
 
   //响应式对象
   const props = defineProps({
@@ -15,6 +16,7 @@
       required: true
     }
   })
+  const userStore = useUserStore()
   const router = useRouter()
   const emits = defineEmits(['record-upload-success'])
   const formRef = ref(null)
@@ -23,6 +25,7 @@
     animal_id: props.animalId,
     rescue_position: '',
     rescue_datetime: null,
+    rescuer_id: userStore.userId,
     rescuer_phone: '',
     rescue_status: 'wait_rescue',
     rescue_station_id: '',
@@ -88,7 +91,7 @@
       if (valid) {
         const formatRescueRecord = rescueRecord
         formatRescueRecord.rescue_datetime = formatRescueRecord.rescue_datetime.toISOString().slice(0, 19)
-        const res = await uploadRescueRecord(formatRescueRecord)
+        const res = await addRescueRecord(formatRescueRecord)
         if (res.status === '200') {
           ElMessage.success('表单提交成功')
           emits('record-upload-success')
