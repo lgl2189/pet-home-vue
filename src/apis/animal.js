@@ -11,6 +11,14 @@ export const uploadAnimalInfo = (formData) => {
 export const getRecommendAnimalList = (num) => {
   return request.get(`/animal/info/recommend?num=${num}`)
 }
+/**
+ * 获取待领养推荐动物列表
+ * @param {number} num - 需要获取的动物数量
+ * @returns {Promise<AxiosResponse>} - 包含推荐动物列表的Promise
+ */
+export const getWaitAdoptRecommendAnimalList = (num) => {
+  return request.get(`/animal/list/wait-adopt/recommend?num=${num}`)
+}
 
 /**
  * 搜索动物信息
@@ -26,6 +34,22 @@ export const searchAnimal = (keyArray, pageNum, pageSize) => {
     }
   })
 }
+
+/**
+ * 搜索待领养动物信息
+ * @param {Array} keyArray - 搜索关键字数组
+ * @returns {Promise<AxiosResponse>} - 包含搜索结果动物信息的Promise
+ */
+export const searchWaitAdoptAnimal = (keyArray, pageNum, pageSize) => {
+  return request.get('/animal/list/wait-adopt', {
+    params: {
+      key: keyArray.join(','),
+      pageNum: pageNum,
+      pageSize: pageSize
+    }
+  })
+}
+
 /**
  * 获取动物详情信息
  * @param {Number} animalId - 动物id

@@ -89,6 +89,22 @@ const router = createRouter({
           component: () => import('@/views/rescue/AnimalDetailView.vue')
         }
       ]
+    },
+    {
+      path: '/adopt',
+      meta: { requiresAuth: true },
+      children: [
+        {
+          path: 'list',
+          name: 'AdoptListView',
+          component: () => import('@/views/adpot/AdoptListView.vue')
+        },
+        {
+          path: 'apply',
+          name: 'AdoptApplyView',
+          component: () => import('@/views/adpot/AdoptApplyView.vue')
+        }
+      ]
     }
   ]
 })
