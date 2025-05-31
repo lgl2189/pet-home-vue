@@ -1,9 +1,13 @@
 <script setup>
   import { getAnimalInfoById } from '@/apis/animal'
+  import { updateRescueRecord } from '@/apis/rescue'
+  import { useUserStore } from '@/stores/user'
+  import { transRescueRecordStatusToName } from '@/utils/rescueUtil'
   import { ref, onMounted } from 'vue'
   import { useRoute } from 'vue-router'
   // 响应式对象
   const route = useRoute()
+  const userStore = useUserStore()
   const animalInfo = ref({
     animal_id: 0,
     name: '',
@@ -38,8 +42,26 @@
     admin_phone: '0',
     admin_email: '0'
   })
-  const isFavorite = ref(false)
+  const rescueRecord = ref({
+    rescue_id: 1,
+    animal_id: 1,
+    rescue_position: '',
+    rescue_datetime: '',
+    rescuer_id: '',
+    rescuer_phone: '',
+    rescue_status: '等待救助',
+    rescue_station_id: '等待救助',
+    extra_info: '测试文本'
+  })
+  const rescueStatusSelectOptions = ref([
+    { name: transRescueRecordStatusToName('wait_rescue'), value: 'wait_rescue' },
+    { name: transRescueRecordStatusToName('under_treatment'), value: 'under_treatment' },
+    { name: transRescueRecordStatusToName('wait_adopted'), value: 'wait_adopted' },
+    { name: transRescueRecordStatusToName('adopted'), value: 'adopted' }
+  ])
+  // const isFavorite = ref(false)
   const currentTab = ref('vaccination')
+  const isShowRescueStatusModifyDialog = ref(false)
   // 函数
   const handleGetAnimalInfo = async () => {
     try {
@@ -49,16 +71,32 @@
       if (res.status === '200') {
         animalInfo.value = res.data.animal_info
         rescueStationInfo.value = res.data.rescue_station_info
+        rescueRecord.value = res.data.rescue_record
       }
     } catch (error) {
       ElMessage.error('获取动物数据失败')
     }
   }
 
-  // 获取图片URL
-  const getImageUrl = (gid) => {
-    // 实际项目中应根据gid生成图片URL
-    return `https://picsum.photos/600/400?random=${gid || Math.random()}`
+  const handleClickModifyStatusBtn = () => {
+    isShowRescueStatusModifyDialog.value = true
+  }
+
+  const handleSaveRescueStatus = async () => {
+    if (!rescueStatusSelectOptions.value.some((item) => item.value === rescueRecord.value.rescue_status)) {
+      ElMessage.error('请选择正确的救助状态')
+      return
+    }
+    const res = await updateRescueRecord(rescueRecord.value.rescue_id, {
+      rescue_id: rescueRecord.value.rescue_id,
+      rescue_status: rescueRecord.value.rescue_status
+    })
+    if (res.status === '200') {
+      ElMessage.success('保存成功')
+    } else {
+      ElMessage.error('保存失败')
+    }
+    isShowRescueStatusModifyDialog.value = false
   }
 
   // 获取健康状态文本
@@ -73,7 +111,7 @@
   }
 
   // 获取健康状态样式
-  const getStatusClass = (status) => {
+  const getAnimalStatusClass = (status) => {
     const statusClassMap = {
       healthy: 'healthy',
       ill: 'ill',
@@ -130,7 +168,7 @@
           <span class="animal-id">#{{ animalInfo.animal_id }}</span>
         </div>
         <div class="animal-status">
-          <span :class="`status-tag ${getStatusClass(animalInfo.health_status)}`">
+          <span :class="`status-tag ${getAnimalStatusClass(animalInfo.health_status)}`">
             {{ getHealthStatusText(animalInfo.health_status) }}
           </span>
           <span v-if="animalInfo.abnormal_warning" class="warning-tag">预警</span>
@@ -187,6 +225,44 @@
           </div>
         </div>
       </div>
+    </div>
+    <!-- 救助记录 -->
+    <div class="rescue-record">
+      <h3>救助记录</h3>
+      <el-descriptions size="large" :column="2" border>
+        <el-descriptions-item label="救助地点：">{{ rescueRecord.rescue_position }}</el-descriptions-item>
+        <el-descriptions-item label="救助时间：">{{ rescueRecord.rescue_datetime }}</el-descriptions-item>
+        <el-descriptions-item label="救助者手机号：">{{ rescueRecord.rescuer_phone }}</el-descriptions-item>
+        <el-descriptions-item label="当前状态：">
+          {{ transRescueRecordStatusToName(rescueRecord.rescue_status) }}
+        </el-descriptions-item>
+        <el-descriptions-item label="额外信息：" :span="2">{{ rescueRecord.extra_info }}</el-descriptions-item>
+      </el-descriptions>
+      <el-button
+        class="modify-btn"
+        size="large"
+        @click="handleClickModifyStatusBtn"
+        v-if="userStore.userId == rescueRecord.rescuer_id">
+        修改状态
+      </el-button>
+      <el-dialog
+        v-model="isShowRescueStatusModifyDialog"
+        title="修改救助状态"
+        width="500"
+        v-if="userStore.userId == rescueRecord.rescuer_id">
+        <el-select v-model="rescueRecord.rescue_status" placeholder="请选择新的状态">
+          <el-option
+            v-for="status in rescueStatusSelectOptions"
+            :key="status.name"
+            :label="status.name"
+            :value="status.value"></el-option>
+        </el-select>
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button type="primary" size="large" @click="handleSaveRescueStatus">保存</el-button>
+          </div>
+        </template>
+      </el-dialog>
     </div>
     <!-- 动物详细介绍 -->
     <div class="animal-description">
@@ -385,6 +461,24 @@
       }
     }
 
+    .rescue-record {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+
+      h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        color: #333;
+        font-size: 20px;
+      }
+
+      .modify-btn {
+        margin-top: 10px;
+      }
+    }
     .animal-description,
     .health-records {
       background-color: #fff;
