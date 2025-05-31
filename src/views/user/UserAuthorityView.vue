@@ -14,6 +14,7 @@
     const res = await getRoleList()
     if (res.status === '200') {
       roleList.value = res.data.role_list
+      roleList.value = roleList.value.filter((item) => item.role_tag !== 'normal')
     }
   }
   const handleGetUserRoleList = async () => {
@@ -26,6 +27,8 @@
     const res = await updateUserRoleList(userStore.userId, selectedRoleList.value)
     if (res.status === '200') {
       ElMessage.success('权限修改成功')
+    } else {
+      ElMessage.error('权限修改失败，原因：' + res.message)
     }
   }
   const saveRoleList = async () => {
