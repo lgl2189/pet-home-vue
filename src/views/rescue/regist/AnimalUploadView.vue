@@ -1,12 +1,18 @@
 <script setup>
-  import { ref, reactive, onMounted } from 'vue'
-  import { getRescueStationList } from '@/apis/rescueStation'
+  import { ref, reactive, onBeforeMount } from 'vue'
   import { uploadAnimalInfo } from '@/apis/animal'
   import { useRouter } from 'vue-router'
   // 响应式对象
+  const props = defineProps({
+    nowStep: {
+      type: Number,
+      required: true
+    }
+  })
+  const emits = defineEmits(['animal-upload-success'])
   const router = useRouter()
+
   const formRef = ref(null)
-  const stationSelectOptionRef = ref(null)
   const animalInfo = reactive({
     species: '',
     breed: '',
@@ -20,8 +26,7 @@
     video_array: [],
     vaccination_record_array: [],
     deworming_record_array: [],
-    medical_report_array: [],
-    rescue_station_id: ''
+    medical_report_array: []
   })
 
   const healthStatusOptions = ['健康', '患病', '康复中', '危急']
@@ -51,29 +56,24 @@
     ]
   })
   // 函数
-  const handleGetStationList = async () => {
-    // 调用API获取站点列表
-    const res = await getRescueStationList()
-    if (res.status === '200') {
-      stationSelectOptionRef.value = res.data.station_info
-    }
-  }
   const submitForm = () => {
-    formRef.value.validate(async (valid) => {
-      if (valid) {
-        // 这里应调用API上传数据
-        const res = await handleUploadAnimalInfo(animalInfo)
-        if (res.status === '200') {
-          ElMessage.success('表单提交成功')
-          router.push('/')
-        } else {
-          ElMessage.error('表单提交失败，请检查网络或联系管理员')
-        }
-      } else {
-        ElMessage.warning('表单验证失败，请检查必填项')
-        return false
-      }
-    })
+    // formRef.value.validate(async (valid) => {
+    //   if (valid) {
+    //     const res = await handleUploadAnimalInfo(animalInfo)
+    //     if (res.status === '200') {
+    //       ElMessage.success('表单提交成功')
+    //       emits('animal-upload-success', res.data.animal_info)
+    //       return true
+    //     } else {
+    //       ElMessage.error('表单提交失败，请检查网络或联系管理员')
+    //     }
+    //   } else {
+    //     ElMessage.warning('表单验证失败，请检查必填项')
+    //     return false
+    //   }
+    // })
+    emits('animal-upload-success', { animal_id: 1 })
+    return true
   }
   const handleUploadAnimalInfo = () => {
     const formData = new FormData()
@@ -87,7 +87,6 @@
     formData.append('personality', animalInfo.personality)
     formData.append('vaccination_record_array', animalInfo.vaccination_record_array)
     formData.append('deworming_record_array', animalInfo.deworming_record_array)
-    formData.append('rescue_station_id', animalInfo.rescue_station_id)
 
     // 添加文件数组（无需手动指定下标）
     animalInfo.image_array.forEach((file) => formData.append('image_array', file.raw))
@@ -101,9 +100,12 @@
   const resetForm = () => {
     formRef.value.resetFields()
   }
-  // 回调函数
-  onMounted(async () => {
-    await handleGetStationList()
+  // 生命周期回调函数
+  onBeforeMount(() => {
+    if (props.nowStep !== 0) {
+      ElMessage.warning('请按步骤操作，先完成上一步操作')
+      router.replace({ name: 'RescueRegistView' })
+    }
   })
 </script>
 <template>
@@ -208,17 +210,6 @@
               </template>
             </el-upload>
           </el-form-item>
-
-          <el-form-item label="救助站" prop="rescue_station_id">
-            <el-select v-model="animalInfo.rescue_station_id" filterable placeholder="Select" style="width: 240px">
-              <el-option
-                v-for="station in stationSelectOptionRef"
-                :key="station.rescue_station_id"
-                :label="station.rescue_station_name"
-                :value="station.rescue_station_id"></el-option>
-            </el-select>
-          </el-form-item>
-
           <el-form-item>
             <el-button type="primary" @click="submitForm">提交</el-button>
             <el-button @click="resetForm">重置</el-button>

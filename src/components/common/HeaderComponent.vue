@@ -60,10 +60,8 @@
         :default-active="$route.meta.activePath || $route.path">
         <el-sub-menu index="1">
           <template #title>救助</template>
-          <el-menu-item index="/rescue/upload" :route="{ name: 'AnimalUploadView' }">上传动物信息</el-menu-item>
+          <el-menu-item index="/rescue/regist" :route="{ name: 'RescueRegistView' }">救助登记</el-menu-item>
           <el-menu-item index="/rescue/search" :route="{ name: 'AnimalSearchView' }">搜索动物信息</el-menu-item>
-          <el-menu-item index="1-3">救助流程</el-menu-item>
-          <el-menu-item index="1-4">救助案例</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="2">
           <template #title>领养</template>
