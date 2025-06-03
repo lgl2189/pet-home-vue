@@ -1,5 +1,5 @@
 <script setup></script>
 <template>
-  <div></div>
+  <div>blacklist</div>
 </template>
 <style lang="less" scoped></style>

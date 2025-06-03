@@ -67,7 +67,6 @@
         <el-sub-menu index="2">
           <template #title>领养</template>
           <el-menu-item index="/adopt/list">可领养动物列表</el-menu-item>
-          <el-menu-item index="/adopt/apply">领养申请</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="3">
           <template #title>志愿者</template>

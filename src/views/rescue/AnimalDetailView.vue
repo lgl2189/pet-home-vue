@@ -4,9 +4,10 @@
   import { useUserStore } from '@/stores/user'
   import { transRescueRecordStatusToName } from '@/utils/rescueUtil'
   import { ref, onMounted } from 'vue'
-  import { useRoute } from 'vue-router'
+  import { useRoute, useRouter } from 'vue-router'
   // 响应式对象
   const route = useRoute()
+  const router = useRouter()
   const userStore = useUserStore()
   const animalInfo = ref({
     animal_id: 0,
@@ -119,6 +120,10 @@
       critical: 'critical'
     }
     return statusClassMap[status] || ''
+  }
+
+  const handleClickAdoptionBtn = () => {
+    router.push({ name: 'AdoptApplyView', query: { animal: animalInfo.value.animal_id } })
   }
 
   // 切换收藏状态
@@ -313,7 +318,7 @@
 
     <!-- 操作按钮 -->
     <div class="action-buttons">
-      <button class="btn-adopt">
+      <button class="btn-adopt" @click="handleClickAdoptionBtn">
         <i class="fa fa-heart"></i>
         我要领养
       </button>
