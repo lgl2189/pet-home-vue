@@ -62,6 +62,7 @@
           <template #title>救助</template>
           <el-menu-item index="/rescue/regist" :route="{ name: 'RescueRegistView' }">救助登记</el-menu-item>
           <el-menu-item index="/rescue/search" :route="{ name: 'AnimalSearchView' }">动物列表</el-menu-item>
+          <el-menu-item index="/rescue/station" :route="{ name: 'RescueStationView' }">救助站管理</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="2">
           <template #title>领养</template>

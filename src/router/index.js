@@ -87,6 +87,30 @@ const router = createRouter({
           path: 'detail/:id',
           name: 'AnimalDetailView',
           component: () => import('@/views/rescue/AnimalDetailView.vue')
+        },
+        {
+          path: 'station',
+          name: 'RescueStationView',
+          component: () => import('@/views/rescue/station/RescueStationView.vue'),
+          children: [
+            {
+              path: 'adopt',
+              name: 'StationAdoptView',
+              component: () => import('@/views/rescue/station/StationAdoptView.vue'),
+              children: [
+                {
+                  path: '/review',
+                  name: 'StationAdoptReviewView',
+                  component: () => import('@/views/rescue/station/StationAdoptReviewView.vue')
+                },
+                {
+                  path: '/blacklist',
+                  name: 'StationAdoptBlacklistView',
+                  component: () => import('@/views/rescue/station/StationAdoptBlacklistView.vue')
+                }
+              ]
+            }
+          ]
         }
       ]
     },
