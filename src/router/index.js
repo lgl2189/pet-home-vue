@@ -90,21 +90,34 @@ const router = createRouter({
         },
         {
           path: 'station',
-          name: 'RescueStationView',
-          component: () => import('@/views/rescue/station/RescueStationView.vue'),
+          redirect: {
+            name: 'StationSelectView'
+          },
           children: [
             {
-              path: 'adopt',
+              path: 'select',
+              name: 'StationSelectView',
+              component: () => import('@/views/rescue/station/StationSelectView.vue')
+            },
+            {
+              path: ':stationId',
+              name: 'RescueStationView',
+              component: () => import('@/views/rescue/station/RescueStationView.vue'),
               children: [
                 {
-                  path: 'review',
-                  name: 'StationAdoptReviewView',
-                  component: () => import('@/views/rescue/station/StationAdoptReviewView.vue')
-                },
-                {
-                  path: 'blacklist',
-                  name: 'StationAdoptBlacklistView',
-                  component: () => import('@/views/rescue/station/StationAdoptBlacklistView.vue')
+                  path: 'adopt',
+                  children: [
+                    {
+                      path: 'review',
+                      name: 'StationAdoptReviewView',
+                      component: () => import('@/views/rescue/station/StationAdoptReviewView.vue')
+                    },
+                    {
+                      path: 'blacklist',
+                      name: 'StationAdoptBlacklistView',
+                      component: () => import('@/views/rescue/station/StationAdoptBlacklistView.vue')
+                    }
+                  ]
                 }
               ]
             }
