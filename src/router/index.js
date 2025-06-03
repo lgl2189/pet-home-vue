@@ -92,11 +92,13 @@ const router = createRouter({
           path: 'station',
           name: 'RescueStationView',
           component: () => import('@/views/rescue/station/RescueStationView.vue'),
+          meta: { activePath: '/rescue/station' },
           children: [
             {
               path: 'adopt',
               name: 'StationAdoptView',
               component: () => import('@/views/rescue/station/StationAdoptView.vue'),
+              meta: { activePath: '/rescue/station/adopt' },
               children: [
                 {
                   path: '/review',
