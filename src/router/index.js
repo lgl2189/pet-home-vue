@@ -110,12 +110,14 @@ const router = createRouter({
                     {
                       path: 'review',
                       name: 'StationAdoptReviewView',
-                      component: () => import('@/views/rescue/station/StationAdoptReviewView.vue')
+                      component: () => import('@/views/rescue/station/StationAdoptReviewView.vue'),
+                      meta: { activePath: '/rescue/station/adopt/review' }
                     },
                     {
                       path: 'blacklist',
                       name: 'StationAdoptBlacklistView',
-                      component: () => import('@/views/rescue/station/StationAdoptBlacklistView.vue')
+                      component: () => import('@/views/rescue/station/StationAdoptBlacklistView.vue'),
+                      meta: { activePath: '/rescue/station/adopt/blacklist' }
                     }
                   ]
                 }

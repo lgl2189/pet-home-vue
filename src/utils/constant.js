@@ -6,3 +6,10 @@ export const SEARCH_CONSTANT = {
   DEFAUTL_PAGE_SIZE: 20,
   DEFAULT_PAGE_NUM_NOW: 1
 }
+
+export const APPLICATION_STATUIS = {
+  PREPEND_REVIEW: 'pending_review',
+  REVIEWING: 'reviewing',
+  APPROVED: 'approved',
+  REFUSED: 'refused'
+}
