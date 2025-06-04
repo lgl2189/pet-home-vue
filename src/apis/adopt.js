@@ -19,3 +19,15 @@ export const addAdoptionApplication = (adoptionApplication) => {
 export const updateAdoptionApplicationStatus = (applicationId, applicationStatus) => {
   return request.put(`/adoption/application/${applicationId}/status`, { application_status: applicationStatus })
 }
+
+export const getBlackListByStationId = (rescueStationId) => {
+  return request.get(`/adoption/black/list/station/${rescueStationId}`)
+}
+
+export const addBlackUser = (blackUser) => {
+  return request.post('/adoption/black', { ...blackUser })
+}
+
+export const deleteBlackUser = (blackUserId) => {
+  return request.delete(`/adoption/black/${blackUserId}`)
+}
