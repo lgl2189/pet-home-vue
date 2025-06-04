@@ -27,7 +27,7 @@
               <el-menu-item
                 index="/rescue/station/adopt/blacklist"
                 :route="{ name: 'StationAdoptBlacklistView', query: { id: stationId, name: stationName } }">
-                添加领养黑名单
+                黑名单管理
               </el-menu-item>
             </el-sub-menu>
           </el-menu>
