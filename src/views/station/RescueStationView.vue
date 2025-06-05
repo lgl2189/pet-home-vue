@@ -30,6 +30,24 @@
                 黑名单管理
               </el-menu-item>
             </el-sub-menu>
+            <el-sub-menu index="/station/volunteer">
+              <template #title>志愿者管理</template>
+              <el-menu-item
+                index="/station/volunteer/task/publish"
+                :route="{ name: 'VolunteerTaskPublishView', query: { id: stationId, name: stationName } }">
+                发布任务
+              </el-menu-item>
+              <el-menu-item
+                index="/station/volunteer/task/list"
+                :route="{ name: 'VolunteerTaskListView', query: { id: stationId, name: stationName } }">
+                任务列表
+              </el-menu-item>
+              <el-menu-item
+                index="/station/volunteer/task/review"
+                :route="{ name: 'VolunteerTaskReviewView', query: { id: stationId, name: stationName } }">
+                任务完成审核
+              </el-menu-item>
+            </el-sub-menu>
           </el-menu>
         </div>
       </el-aside>

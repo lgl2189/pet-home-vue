@@ -122,6 +122,29 @@ const router = createRouter({
                   meta: { activePath: '/station/adopt/blacklist' }
                 }
               ]
+            },
+            {
+              path: 'volunteer',
+              children: [
+                {
+                  path: 'task/publish',
+                  name: 'VolunteerTaskPublishView',
+                  component: () => import('@/views/volunteer/VolunteerTaskPublishView.vue'),
+                  meta: { activePath: '/station/volunteer/task/publish' }
+                },
+                {
+                  path: 'task/list',
+                  name: 'VolunteerTaskListView',
+                  component: () => import('@/views/volunteer/VolunteerTaskListView.vue'),
+                  meta: { activePath: '/station/volunteer/task/list' }
+                },
+                {
+                  path: 'task/review',
+                  name: 'VolunteerTaskReviewView',
+                  component: () => import('@/views/volunteer/VolunteerTaskReviewView.vue'),
+                  meta: { activePath: '/station/volunteer/task/publish' }
+                }
+              ]
             }
           ]
         }

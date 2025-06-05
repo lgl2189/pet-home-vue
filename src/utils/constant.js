@@ -13,3 +13,26 @@ export const APPLICATION_STATUIS = {
   APPROVED: 'approved',
   REFUSED: 'refused'
 }
+
+export const VOLUNTEER_TASK_STATUS = {
+  AVAILABLE: {
+    value: 'available',
+    label: '可接取'
+  },
+  ASSIGNED: {
+    value: 'assigned',
+    label: '已指派'
+  },
+  STARTED: {
+    value: 'started',
+    label: '已开始'
+  },
+  FINISH_REVIEWING: {
+    value: 'finish_reviewing',
+    label: '完成审核中'
+  },
+  COMPLETED: {
+    value: 'completed',
+    label: '已完成'
+  }
+}
