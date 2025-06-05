@@ -40,7 +40,7 @@
               <el-menu-item
                 index="/station/volunteer/task/list"
                 :route="{ name: 'VolunteerTaskListView', query: { id: stationId, name: stationName } }">
-                任务列表
+                管理任务
               </el-menu-item>
               <el-menu-item
                 index="/station/volunteer/task/review"
