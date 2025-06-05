@@ -1,11 +1,11 @@
 import request from '@/utils/request'
 
 export const getRescueStationList = () => {
-  return request.get('/rescue/station/public/info/list')
+  return request.get('/station/public/list')
 }
 
 export const getRescueStationListByAdminId = (adminId) => {
-  return request.get(`/rescue/station/list?adminId=${adminId}`)
+  return request.get(`/station/list?adminId=${adminId}`)
 }
 
 export const addRescueRecord = (record) => {

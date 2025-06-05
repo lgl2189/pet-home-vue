@@ -17,15 +17,15 @@
           <h4 class="menu-title">救助站管理</h4>
           <h5 class="menu-title-tip">{{ stationName }} (id: {{ stationId }})</h5>
           <el-menu :router="true" :default-active="$route.meta.activePath || $route.path">
-            <el-sub-menu index="/rescue/station/adopt">
+            <el-sub-menu index="/station/adopt">
               <template #title>领养管理</template>
               <el-menu-item
-                index="/rescue/station/adopt/review"
+                index="/station/adopt/review"
                 :route="{ name: 'StationAdoptReviewView', query: { id: stationId, name: stationName } }">
                 领养申请审核
               </el-menu-item>
               <el-menu-item
-                index="/rescue/station/adopt/blacklist"
+                index="/station/adopt/blacklist"
                 :route="{ name: 'StationAdoptBlacklistView', query: { id: stationId, name: stationName } }">
                 黑名单管理
               </el-menu-item>

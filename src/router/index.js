@@ -87,39 +87,39 @@ const router = createRouter({
           path: 'detail/:id',
           name: 'AnimalDetailView',
           component: () => import('@/views/rescue/AnimalDetailView.vue')
+        }
+      ]
+    },
+    {
+      path: '/station',
+      redirect: {
+        name: 'StationSelectView'
+      },
+      children: [
+        {
+          path: 'select',
+          name: 'StationSelectView',
+          component: () => import('@/views/station/StationSelectView.vue')
         },
         {
-          path: 'station',
-          redirect: {
-            name: 'StationSelectView'
-          },
+          path: ':stationId',
+          name: 'RescueStationView',
+          component: () => import('@/views/station/RescueStationView.vue'),
           children: [
             {
-              path: 'select',
-              name: 'StationSelectView',
-              component: () => import('@/views/rescue/station/StationSelectView.vue')
-            },
-            {
-              path: ':stationId',
-              name: 'RescueStationView',
-              component: () => import('@/views/rescue/station/RescueStationView.vue'),
+              path: 'adopt',
               children: [
                 {
-                  path: 'adopt',
-                  children: [
-                    {
-                      path: 'review',
-                      name: 'StationAdoptReviewView',
-                      component: () => import('@/views/rescue/station/StationAdoptReviewView.vue'),
-                      meta: { activePath: '/rescue/station/adopt/review' }
-                    },
-                    {
-                      path: 'blacklist',
-                      name: 'StationAdoptBlacklistView',
-                      component: () => import('@/views/rescue/station/StationAdoptBlacklistView.vue'),
-                      meta: { activePath: '/rescue/station/adopt/blacklist' }
-                    }
-                  ]
+                  path: 'review',
+                  name: 'StationAdoptReviewView',
+                  component: () => import('@/views/station/StationAdoptReviewView.vue'),
+                  meta: { activePath: '/station/adopt/review' }
+                },
+                {
+                  path: 'blacklist',
+                  name: 'StationAdoptBlacklistView',
+                  component: () => import('@/views/station/StationAdoptBlacklistView.vue'),
+                  meta: { activePath: '/station/adopt/blacklist' }
                 }
               ]
             }
