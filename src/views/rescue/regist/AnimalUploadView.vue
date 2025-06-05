@@ -85,8 +85,6 @@
     formData.append('is_sterilized', animalInfo.is_sterilized)
     formData.append('description', animalInfo.description)
     formData.append('personality', animalInfo.personality)
-    formData.append('vaccination_record_array', animalInfo.vaccination_record_array)
-    formData.append('deworming_record_array', animalInfo.deworming_record_array)
 
     // 添加文件数组（无需手动指定下标）
     animalInfo.image_array.forEach((file) => formData.append('image_array', file.raw))
