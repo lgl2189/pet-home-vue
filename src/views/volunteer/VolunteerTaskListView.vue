@@ -1,7 +1,7 @@
 <script setup>
   import { ref, onBeforeMount, watch } from 'vue'
   import { useRoute } from 'vue-router'
-  import { getVolunteerTasksByRescueStationId } from '@/apis/volunteer'
+  import { getVolunteerTasksByRescueStationId, updateVolunteerTask } from '@/apis/volunteer'
   import { getStatusLabel } from '@/utils/enum'
   import { VOLUNTEER_TASK_STATUS } from '@/utils/constant'
 
@@ -14,6 +14,17 @@
   const total = ref(0)
   const dialogVisible = ref(false)
   const dialogContent = ref('')
+
+  // 监听器
+  watch(pageSize, (newSize) => {
+    pageSize.value = newSize
+    handleGetTaskList()
+  })
+
+  watch(currentPage, (newPage) => {
+    currentPage.value = newPage
+    handleGetTaskList()
+  })
 
   // 函数
   const handleGetTaskList = async () => {
@@ -39,17 +50,6 @@
     }
   }
 
-  // 监听器
-  watch(pageSize, (newSize) => {
-    pageSize.value = newSize
-    handleGetTaskList()
-  })
-
-  watch(currentPage, (newPage) => {
-    currentPage.value = newPage
-    handleGetTaskList()
-  })
-
   const formatDateTime = (datetime) => {
     if (!datetime) return ''
     return datetime.replace('T', ' ')
@@ -64,6 +64,13 @@
   const showTaskDetail = (content) => {
     dialogContent.value = content
     dialogVisible.value = true
+  }
+
+  const handleChangeStatus = async (taskId, status) => {
+    const res = await updateVolunteerTask(taskId, status)
+    if (res.status === '200') {
+      ElMessage.success('状态更新成功')
+    }
   }
 
   // 生命周期
@@ -104,6 +111,24 @@
           </template>
         </el-table-column>
         <el-table-column prop="task_point" label="任务积分"></el-table-column>
+        <el-table-column label="状态">
+          <template #default="scope">
+            <el-select v-model="scope.row.task_status">
+              <el-option
+                v-for="status in VOLUNTEER_TASK_STATUS"
+                :key="status.value"
+                :label="status.label"
+                :value="status.value"></el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template #default="scope">
+            <el-button type="default" @click="handleChangeStatus(scope.row.task_id, scope.row.task_status)">
+              保存
+            </el-button>
+          </template>
+        </el-table-column>
       </el-table>
 
       <el-pagination
