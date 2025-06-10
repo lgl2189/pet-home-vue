@@ -111,7 +111,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="task_point" label="任务积分"></el-table-column>
-        <el-table-column label="状态">
+        <el-table-column label="修改状态">
           <template #default="scope">
             <el-select v-model="scope.row.task_status">
               <el-option
