@@ -142,7 +142,7 @@ const router = createRouter({
                   path: 'task/review',
                   name: 'VolunteerTaskReviewView',
                   component: () => import('@/views/volunteer/VolunteerTaskReviewView.vue'),
-                  meta: { activePath: '/station/volunteer/task/publish' }
+                  meta: { activePath: '/station/volunteer/task/review' }
                 }
               ]
             }

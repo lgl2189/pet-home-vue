@@ -36,3 +36,26 @@ export const VOLUNTEER_TASK_STATUS = {
     label: '已完成'
   }
 }
+
+export const VOLUNTEER_TASK_RECORD_STATUS = {
+  UNSTART: {
+    value: 'unstart',
+    label: '未开始'
+  },
+  STARTED: {
+    value: 'started',
+    label: '已开始'
+  },
+  FINISH_REVIEWING: {
+    value: 'finish_reviewing',
+    label: '完成审核中'
+  },
+  COMPLETED: {
+    value: 'completed',
+    label: '已完成'
+  },
+  FAILED: {
+    value: 'failed',
+    label: '未通过审核'
+  }
+}
