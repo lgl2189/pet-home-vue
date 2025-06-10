@@ -1,7 +1,7 @@
 <script setup>
   import { ref, onBeforeMount, watch } from 'vue'
   import { useRoute } from 'vue-router'
-  import { getVolunteerTasksByRescueStationId, updateVolunteerTask } from '@/apis/volunteer'
+  import { getVolunteerTasksByRescueStationId, updateVolunteerTaskStatus } from '@/apis/volunteer'
   import { getStatusLabel } from '@/utils/enum'
   import { VOLUNTEER_TASK_STATUS } from '@/utils/constant'
 
@@ -67,7 +67,7 @@
   }
 
   const handleChangeStatus = async (taskId, status) => {
-    const res = await updateVolunteerTask(taskId, status)
+    const res = await updateVolunteerTaskStatus(taskId, status)
     if (res.status === '200') {
       ElMessage.success('状态更新成功')
     }

@@ -8,7 +8,7 @@ export const addVolunteerTask = (volunteerTask) => {
   return request.post('/volunteer/task', { ...volunteerTask })
 }
 
-export const updateVolunteerTask = (taskId, taskStatus) => {
+export const updateVolunteerTaskStatus = (taskId, taskStatus) => {
   return request.put(`/volunteer/task/${taskId}`, {
     task_status: taskStatus
   })
