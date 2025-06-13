@@ -41,3 +41,15 @@ export const getAllVolunteerTaskList = (pageNum, pageSize) => {
 export const searchVolunteerTaskList = (keyword, pageNum, pageSize) => {
   return request.get(`/volunteer/task/search?keyword=${keyword}&pageNum=${pageNum}&pageSize=${pageSize}`)
 }
+
+// 获取当前用户接受的所有志愿者任务记录
+export const getVolunteerTaskRecordByUserId = (userId, pageNum, pageSize) => {
+  return request.get(`/volunteer/task/record/user/${userId}?pageNum=${pageNum}&pageSize=${pageSize}`)
+}
+
+// 提交志愿者任务完成证明
+export const submitVolunteerTaskRecordProof = (taskRecordId, fileList) => {
+  const formData = new FormData()
+  fileList.forEach((file) => formData.append('image_array', file.raw))
+  return request.post(`/volunteer/task/record/${taskRecordId}/proof`, formData)
+}

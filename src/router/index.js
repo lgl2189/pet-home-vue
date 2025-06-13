@@ -179,6 +179,16 @@ const router = createRouter({
           path: 'task/detail/:id',
           name: 'VolunteerTaskDetailView',
           component: () => import('@/views/volunteer/VolunteerTaskDetailView.vue')
+        },
+        {
+          path: 'task/user',
+          name: 'UserVolunteerTaskview',
+          component: () => import('@/views/volunteer/UserVolunteerTaskview.vue')
+        },
+        {
+          path: 'task/submit/:recordId',
+          name: 'UserVolunteerTaskSubmitView',
+          component: () => import('@/views/volunteer/UserVolunteerTaskSubmitView.vue')
         }
       ]
     }

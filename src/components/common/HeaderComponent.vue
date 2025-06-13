@@ -73,6 +73,7 @@
           <el-menu-item index="/volunteer/task/search" :route="{ name: 'VolunteerTaskSearchView' }">
             志愿者活动
           </el-menu-item>
+          <el-menu-item index="/volunteer/task/user" :route="{ name: 'UserVolunteerTaskview' }">我的任务</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="4">
           <template #title>捐赠</template>
