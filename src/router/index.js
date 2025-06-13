@@ -165,6 +165,22 @@ const router = createRouter({
           component: () => import('@/views/adpot/AdoptApplyView.vue')
         }
       ]
+    },
+    {
+      path: '/volunteer',
+      meta: { requiresAuth: true },
+      children: [
+        {
+          path: 'task/search',
+          name: 'VolunteerTaskSearchView',
+          component: () => import('@/views/volunteer/VolunteerTaskSearchView.vue')
+        },
+        {
+          path: 'task/detail/:id',
+          name: 'VolunteerTaskDetailView',
+          component: () => import('@/views/volunteer/VolunteerTaskDetailView.vue')
+        }
+      ]
     }
   ]
 })

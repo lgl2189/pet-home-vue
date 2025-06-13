@@ -14,6 +14,10 @@ export const updateVolunteerTaskStatus = (taskId, taskStatus) => {
   })
 }
 
+export const acceptVolunteerTask = (taskId, userId) => {
+  return request.post(`/volunteer/task/record/${taskId}?userId=${userId}`)
+}
+
 // 获取志愿者任务记录列表
 export const getVolunteerTaskRecordList = (pageNum, pageSize) => {
   return request.get(`/volunteer/task/record?pageNum=${pageNum}&pageSize=${pageSize}`)
@@ -28,4 +32,12 @@ export const updateVolunteerTaskRecordStatus = (recordId, status) => {
   return request.put(`/volunteer/task/record/${recordId}`, {
     task_record_status: status
   })
+}
+// 获取全部志愿者任务
+export const getAllVolunteerTaskList = (pageNum, pageSize) => {
+  return request.get(`/volunteer/task/all?pageNum=${pageNum}&pageSize=${pageSize}`)
+}
+// 搜索志愿者任务
+export const searchVolunteerTaskList = (keyword, pageNum, pageSize) => {
+  return request.get(`/volunteer/task/search?keyword=${keyword}&pageNum=${pageNum}&pageSize=${pageSize}`)
 }

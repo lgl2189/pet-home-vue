@@ -70,8 +70,9 @@
         </el-sub-menu>
         <el-sub-menu index="3">
           <template #title>志愿者</template>
-          <el-menu-item index="3-1">志愿者招募</el-menu-item>
-          <el-menu-item index="3-2">志愿者活动</el-menu-item>
+          <el-menu-item index="/volunteer/task/search" :route="{ name: 'VolunteerTaskSearchView' }">
+            志愿者活动
+          </el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="4">
           <template #title>捐赠</template>
