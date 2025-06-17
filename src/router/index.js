@@ -156,6 +156,16 @@ const router = createRouter({
                   meta: { activePath: '/station/donation/receive' }
                 }
               ]
+            },
+            {
+              path: 'material',
+              children: [
+                {
+                  path: 'demand/manage',
+                  name: 'MaterialDemandManagementView',
+                  component: () => import('@/views/donation/MaterialDemandManagementView.vue')
+                }
+              ]
             }
           ]
         }
@@ -200,6 +210,22 @@ const router = createRouter({
           path: 'task/submit/:recordId',
           name: 'UserVolunteerTaskSubmitView',
           component: () => import('@/views/volunteer/UserVolunteerTaskSubmitView.vue')
+        }
+      ]
+    },
+    {
+      path: '/donation',
+      requiresAuth: true,
+      children: [
+        {
+          path: 'material',
+          children: [
+            {
+              path: 'demand/list',
+              name: 'DonationDemandListView',
+              component: () => import('@/views/donation/DonationDemandListView.vue')
+            }
+          ]
         }
       ]
     }

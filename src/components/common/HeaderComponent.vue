@@ -77,7 +77,7 @@
         </el-sub-menu>
         <el-sub-menu index="4">
           <template #title>捐赠</template>
-          <el-menu-item index="4-1">捐赠方式</el-menu-item>
+          <el-menu-item index="/donation/material/demand/list">需求列表</el-menu-item>
           <el-menu-item index="4-2">捐赠记录</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="5">

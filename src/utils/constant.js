@@ -59,3 +59,13 @@ export const VOLUNTEER_TASK_RECORD_STATUS = {
     label: '未通过审核'
   }
 }
+export const SUPPLY_DEMAND_STATUS = {
+  UNFINISHED: {
+    value: 'unfinished',
+    label: '未完成'
+  },
+  FINISHED: {
+    value: 'finished',
+    label: '已完成'
+  }
+}
