@@ -83,7 +83,6 @@
 <style lang="less" scoped>
   .container {
     background-color: #ffffff;
-    height: 100vh;
     padding: 24px;
     .aside {
       .menu {
