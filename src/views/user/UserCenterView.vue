@@ -40,7 +40,6 @@
 <style lang="less" scoped>
   .user-center-container {
     display: flex;
-    height: 100vh;
   }
 
   .menu-wrapper {
