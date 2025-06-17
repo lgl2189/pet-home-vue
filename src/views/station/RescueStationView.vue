@@ -56,6 +56,19 @@
                 收款方式管理
               </el-menu-item>
             </el-sub-menu>
+            <el-sub-menu index="/station/material">
+              <template #title>物资管理</template>
+              <el-menu-item
+                index="/station/material/inventory/manage"
+                :route="{ name: 'InventoryManagementView', query: { id: stationId, name: stationName } }">
+                库存管理
+              </el-menu-item>
+              <el-menu-item
+                index="/station/material/demand/manage"
+                :route="{ name: 'MaterialDemandManagementView', query: { id: stationId, name: stationName } }">
+                需求管理
+              </el-menu-item>
+            </el-sub-menu>
           </el-menu>
         </div>
       </el-aside>
