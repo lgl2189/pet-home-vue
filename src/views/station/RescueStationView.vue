@@ -48,6 +48,14 @@
                 任务完成审核
               </el-menu-item>
             </el-sub-menu>
+            <el-sub-menu index="/station/donation">
+              <template #title>捐赠管理</template>
+              <el-menu-item
+                index="/station/donation/receive"
+                :route="{ name: 'StationDonationReceiveView', query: { id: stationId, name: stationName } }">
+                收款方式管理
+              </el-menu-item>
+            </el-sub-menu>
           </el-menu>
         </div>
       </el-aside>

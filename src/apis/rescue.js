@@ -8,6 +8,10 @@ export const getRescueStationListByAdminId = (adminId) => {
   return request.get(`/station/list?adminId=${adminId}`)
 }
 
+export const getRescueStationInfoById = (stationId) => {
+  return request.get(`/station/${stationId}`)
+}
+
 export const addRescueRecord = (record) => {
   return request.post('/rescue/record', record)
 }

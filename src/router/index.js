@@ -145,6 +145,17 @@ const router = createRouter({
                   meta: { activePath: '/station/volunteer/task/review' }
                 }
               ]
+            },
+            {
+              path: 'donation',
+              children: [
+                {
+                  path: 'receive',
+                  name: 'StationDonationReceiveView',
+                  component: () => import('@/views/station/StationDonationReceiveView.vue'),
+                  meta: { activePath: '/station/donation/receive' }
+                }
+              ]
             }
           ]
         }
