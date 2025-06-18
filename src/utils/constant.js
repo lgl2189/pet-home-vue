@@ -69,3 +69,14 @@ export const SUPPLY_DEMAND_STATUS = {
     label: '已完成'
   }
 }
+
+export const inventoryChangeType = {
+  IN: {
+    value: 'in',
+    label: '入库'
+  },
+  OUT: {
+    value: 'out',
+    label: '出库'
+  }
+}

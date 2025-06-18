@@ -1,7 +1,15 @@
 <script setup>
   import { ref, reactive } from 'vue'
-  import { getInventoryList, addInventory, updateInventory, deleteInventory } from '@/apis/donation'
+  import {
+    getInventoryList,
+    addInventory,
+    updateInventory,
+    deleteInventory,
+    addInventoryChangeRecord
+  } from '@/apis/donation' // 假设添加了 changeInventory 接口
   import { useRoute } from 'vue-router'
+  import { inventoryChangeType } from '@/utils/constant'
+  import dayjs from 'dayjs'
 
   // 响应式对象
   const route = useRoute()
@@ -13,11 +21,38 @@
     inventory_quantity: '',
     warning_quantity: ''
   })
-  const rules = reactive({
+  const inventoryRules = reactive({
     supply_name: [{ required: true, message: '请输入物资名称', trigger: 'blur' }],
     inventory_quantity: [{ required: true, message: '请输入库存数量', trigger: 'blur' }],
     warning_quantity: [{ required: true, message: '请输入预警数量', trigger: 'blur' }]
   })
+
+  const nowDatetime = dayjs(new Date()).format('YYYY-MM-DDTHH:mm:ss')
+  const inventoryChangeFormRef = ref(null)
+  const inventoryChangeForm = reactive({
+    rescue_station_id: route.query.id,
+    inventory_id: '',
+    purpose: '',
+    change_num: 0,
+    change_type: '',
+    change_datetime: nowDatetime
+  })
+  const inventoryChangeRules = reactive({
+    inventory_id: [{ required: true, message: '请输入物资id', trigger: 'blur' }],
+    purpose: [{ required: true, message: '请输入用途或来源', trigger: 'blur' }],
+    change_num: [{ required: true, message: '请输入数量', trigger: 'blur' }],
+    change_type: [
+      {
+        required: true,
+        message: '请选择类型',
+        type: 'enum',
+        enum: Object.values(inventoryChangeType).map((item) => item.value),
+        trigger: 'blur'
+      }
+    ],
+    change_datetime: [{ required: true, message: '请选择日期', trigger: 'blur' }]
+  })
+
   const currentPage = ref(1)
   const pageSize = ref(10)
   const total = ref(0)
@@ -85,13 +120,38 @@
     handleGetInventoryList(page, pageSize.value)
   }
 
+  // 提交物资入库和出库表单
+  const submitInventoryChangeForm = () => {
+    inventoryChangeFormRef.value.validate(async (valid) => {
+      if (valid) {
+        const res = await addInventoryChangeRecord(inventoryChangeForm)
+        if (res.status === '200') {
+          ElMessage.success('操作成功')
+          handleGetInventoryList()
+          resetInventoryChangeForm()
+        } else {
+          ElMessage.error('操作失败，请稍后再试')
+        }
+      } else {
+        ElMessage.error('验证失败，请检查输入内容')
+        return false
+      }
+    })
+  }
+
+  // 重置物资入库和出库表单
+  const resetInventoryChangeForm = () => {
+    inventoryChangeFormRef.value.resetFields()
+  }
+
   // 初始化数据
   handleGetInventoryList()
 </script>
 <template>
   <div class="inventory-management-container">
     <el-card class="box-card">
-      <el-form :model="inventoryForm" :rules="rules" ref="inventoryFormRef" label-width="120px" size="large">
+      <template #header>添加物资种类</template>
+      <el-form :model="inventoryForm" :rules="inventoryRules" ref="inventoryFormRef" label-width="120px" size="large">
         <el-form-item label="物资名称" prop="supply_name">
           <el-input v-model="inventoryForm.supply_name" placeholder="请输入物资名称" />
         </el-form-item>
@@ -104,6 +164,46 @@
         <el-form-item>
           <el-button type="primary" @click="submitInventoryForm">添加</el-button>
           <el-button @click="resetInventoryForm">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+    <el-card class="box-card">
+      <template #header>物资入库和出库</template>
+      <el-form
+        :model="inventoryChangeForm"
+        :rules="inventoryChangeRules"
+        ref="inventoryChangeFormRef"
+        label-width="120px"
+        size="large">
+        <el-form-item label="物资id" prop="inventory_id">
+          <el-input v-model="inventoryChangeForm.inventory_id" placeholder="请输入物资id" />
+        </el-form-item>
+        <el-form-item label="使用目的或来源" prop="purpose">
+          <el-input v-model="inventoryChangeForm.purpose" placeholder="请输入用途或来源" />
+        </el-form-item>
+        <el-form-item label="变化类型（入库或出库）" prop="change_type">
+          <el-select v-model="inventoryChangeForm.change_type" placeholder="请选择类型">
+            <el-option
+              v-for="item in Object.values(inventoryChangeType)"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="变化数量" prop="change_num">
+          <el-input v-model.number="inventoryChangeForm.change_num" placeholder="请输入数量" />
+        </el-form-item>
+        <el-form-item label="日期" prop="change_datetime">
+          <el-date-picker
+            v-model="inventoryChangeForm.change_datetime"
+            type="datetime"
+            format="YYYY-MM-DD HH:mm:ss"
+            value-format="YYYY-MM-DDTHH:mm:ss"
+            placeholder="请选择日期"></el-date-picker>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitInventoryChangeForm">提交</el-button>
+          <el-button @click="resetInventoryChangeForm">重置</el-button>
         </el-form-item>
       </el-form>
     </el-card>

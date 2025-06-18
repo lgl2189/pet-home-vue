@@ -67,6 +67,10 @@ export const getInventoryChangeList = (rescueStationId, pageNum, pageSize) => {
   )
 }
 
+export const addInventoryChangeRecord = (inventoryChange) => {
+  return request.post('/material/inventory/change', { ...inventoryChange })
+}
+
 // 获取物资需求记录列表
 export const getSupplyDemandList = (stationId, pageNum, pageSize) => {
   return request.get(`/material/demand/list/station/${stationId}?pageNum=${pageNum}&pageSize=${pageSize}`)
