@@ -95,6 +95,7 @@ const router = createRouter({
       redirect: {
         name: 'StationSelectView'
       },
+      meta: { requiresAuth: true },
       children: [
         {
           path: 'select',
@@ -161,9 +162,16 @@ const router = createRouter({
               path: 'material',
               children: [
                 {
+                  path: 'inventory/manage',
+                  name: 'InventoryManagementView',
+                  component: () => import('@/views/donation/InventoryManagementView.vue'),
+                  meta: { activePath: '/station/material/inventory/manage' }
+                },
+                {
                   path: 'demand/manage',
                   name: 'MaterialDemandManagementView',
-                  component: () => import('@/views/donation/MaterialDemandManagementView.vue')
+                  component: () => import('@/views/donation/MaterialDemandManagementView.vue'),
+                  meta: { activePath: '/station/material/demand/manage' }
                 }
               ]
             }

@@ -35,41 +35,41 @@ export const updateSupplyDemandStatus = (supplyDemandId, status) => {
 }
 
 // 获取物资库存列表
-export const getInventoryList = (pageNum, pageSize) => {
-  return request.get(`/inventory/list?pageNum=${pageNum}&pageSize=${pageSize}`)
+export const getInventoryList = (stationId, pageNum, pageSize) => {
+  return request.get(`/material/inventory/list/station/${stationId}?pageNum=${pageNum}&pageSize=${pageSize}`)
 }
 
 // 添加物资库存
 export const addInventory = (inventory) => {
-  return request.post('/inventory/add', { ...inventory })
+  return request.post('/material/inventory', { ...inventory })
 }
 
 // 更新物资库存
 export const updateInventory = (inventoryId, inventory) => {
-  return request.put(`/inventory/${inventoryId}/update`, { ...inventory })
+  return request.put(`/material/inventory/${inventoryId}`, { ...inventory })
 }
 
 // 删除物资库存
 export const deleteInventory = (inventoryId) => {
-  return request.delete(`/inventory/${inventoryId}/delete`)
+  return request.delete(`/material/inventory/${inventoryId}`)
 }
 
 // 获取物资需求记录列表
-export const getSupplyDemandList = (pageNum, pageSize) => {
-  return request.get(`/supply_demand_record/list?pageNum=${pageNum}&pageSize=${pageSize}`)
+export const getSupplyDemandList = (stationId, pageNum, pageSize) => {
+  return request.get(`/material/demand/list/station/${stationId}?pageNum=${pageNum}&pageSize=${pageSize}`)
 }
 
 // 添加物资需求记录
 export const addSupplyDemand = (supplyDemand) => {
-  return request.post('/supply_demand_record/add', { ...supplyDemand })
+  return request.post('/material/demand', { ...supplyDemand })
 }
 
 // 更新物资需求记录
 export const updateSupplyDemand = (supplyDemandId, supplyDemand) => {
-  return request.put(`/supply_demand_record/${supplyDemandId}/update`, { ...supplyDemand })
+  return request.put(`/material/demand/${supplyDemandId}`, { ...supplyDemand })
 }
 
 // 删除物资需求记录
-export const deleteSupplyDemand = (supplyDemandId) => {
-  return request.delete(`/supply_demand_record/${supplyDemandId}/delete`)
+export const deleteSupplyDemand = (demandId) => {
+  return request.delete(`/material/demand/${demandId}`)
 }
