@@ -1,8 +1,8 @@
 <script setup>
   import { getInventoryChangeList, getInventoryList } from '@/apis/donation'
   import { getRescueStationInfoById } from '@/apis/rescue'
-  import { ref, onBeforeMount } from 'vue'
-  import { useRouter, useRoute } from 'vue-router'
+  import { ref, onBeforeMount, watch } from 'vue'
+  import { useRoute } from 'vue-router'
 
   // 响应式对象
   const route = useRoute()
@@ -68,8 +68,16 @@
     try {
       // 应改为并行请求数据
       await fetchRescueStationInfo(rescueStationId)
-      await fetchInventoryList(rescueStationId, 1, 10)
-      await fetchInventoryChangeRecords(rescueStationId, 1, 10)
+      await fetchInventoryList(
+        rescueStationId,
+        inventoryPageInfo.value.currentPageNum,
+        inventoryPageInfo.value.pageSize
+      )
+      await fetchInventoryChangeRecords(
+        rescueStationId,
+        inventoryChangePageInfo.value.currentPageNum,
+        inventoryChangePageInfo.value.pageSize
+      )
     } finally {
       loading.value = false
     }
@@ -84,6 +92,33 @@
   const formatDateTime = (dateTime) => {
     return dateTime ? new Date(dateTime).toLocaleString() : '-'
   }
+
+  // 监听器
+  watch(
+    inventoryPageInfo,
+    async (newValue) => {
+      inventoryPageInfo.value = newValue
+      await fetchInventoryList(
+        rescueStationId,
+        inventoryPageInfo.value.currentPageNum,
+        inventoryPageInfo.value.pageSize
+      )
+    },
+    { deep: true }
+  )
+
+  watch(
+    inventoryChangePageInfo,
+    async (newValue) => {
+      inventoryChangePageInfo.value = newValue
+      await fetchInventoryChangeRecords(
+        rescueStationId,
+        inventoryChangePageInfo.value.currentPageNum,
+        inventoryChangePageInfo.value.pageSize
+      )
+    },
+    { deep: true }
+  )
 
   // 生命周期函数
   onBeforeMount(async () => {
