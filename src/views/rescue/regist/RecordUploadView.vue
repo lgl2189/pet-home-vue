@@ -4,6 +4,7 @@
   import { useRouter } from 'vue-router'
   import { getRescueStationList, addRescueRecord } from '@/apis/rescue'
   import { useUserStore } from '@/stores/user'
+  import dayjs from 'dayjs'
 
   //响应式对象
   const props = defineProps({
@@ -90,7 +91,7 @@
     formRef.value.validate(async (valid) => {
       if (valid) {
         const formatRescueRecord = rescueRecord
-        formatRescueRecord.rescue_datetime = formatRescueRecord.rescue_datetime.toISOString().slice(0, 19)
+        formatRescueRecord.rescue_datetime = dayjs(formatRescueRecord.rescue_datetime).format('YYYY-MM-DDTHH:mm:ss')
         const res = await addRescueRecord(formatRescueRecord)
         if (res.status === '200') {
           ElMessage.success('表单提交成功')
