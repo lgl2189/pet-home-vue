@@ -234,6 +234,22 @@ const router = createRouter({
               component: () => import('@/views/donation/DonationDemandListView.vue')
             }
           ]
+        },
+        {
+          path: 'station',
+          children: [
+            {
+              path: 'list',
+              name: 'RescueStationListView',
+              component: () => import('@/views/donation/RescueStationListView.vue')
+            },
+            {
+              path: 'detail/:stationId',
+              name: 'RescueStationDetailView',
+              component: () => import('@/views/donation/RescueStationDetailView.vue'),
+              meta: { activePath: '/donation/station/list' }
+            }
+          ]
         }
       ]
     }

@@ -54,6 +54,19 @@ export const deleteInventory = (inventoryId) => {
   return request.delete(`/material/inventory/${inventoryId}`)
 }
 
+/**
+ * 获取一个救助站的物资变更记录列表
+ * @param {*} rescueStationId 救助站ID
+ * @param {*} pageNum 当前页码
+ * @param {*} pageSize 每页包含记录条数
+ * @returns
+ */
+export const getInventoryChangeList = (rescueStationId, pageNum, pageSize) => {
+  return request.get(
+    `/material/inventory/change/list/station/${rescueStationId}?pageNum=${pageNum}&pageSize=${pageSize}`
+  )
+}
+
 // 获取物资需求记录列表
 export const getSupplyDemandList = (stationId, pageNum, pageSize) => {
   return request.get(`/material/demand/list/station/${stationId}?pageNum=${pageNum}&pageSize=${pageSize}`)

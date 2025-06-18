@@ -77,8 +77,12 @@
         </el-sub-menu>
         <el-sub-menu index="4">
           <template #title>捐赠</template>
-          <el-menu-item index="/donation/material/demand/list">需求列表</el-menu-item>
-          <el-menu-item index="4-2">捐赠记录</el-menu-item>
+          <el-menu-item index="/donation/material/demand/list" :route="{ name: 'DonationDemandListView' }">
+            物资需求列表
+          </el-menu-item>
+          <el-menu-item index="/donation/station/list" :route="{ name: 'RescueStationListView' }">
+            救助站列表
+          </el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="5">
           <template #title>展示</template>
