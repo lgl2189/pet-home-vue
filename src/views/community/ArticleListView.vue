@@ -27,10 +27,16 @@
   }
 
   watch(
-    () => pagination.value,
+    () => pagination.value.pageSize,
+    async () => {
+      await getList(pagination.value.currentPage)
+    }
+  )
+
+  watch(
+    () => pagination.value.currentPage,
     async (newValue) => {
-      pagination.value.pageSize = newValue.pageSize
-      await getList(newValue.currentPage)
+      await getList(newValue)
     }
   )
 
