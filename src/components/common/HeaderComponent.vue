@@ -86,7 +86,10 @@
         </el-sub-menu>
         <el-sub-menu index="5">
           <template #title>科普</template>
-          <el-menu-item index="/community/article" :route="{ name: 'ArticleListView' }">科普文章</el-menu-item>
+          <el-menu-item index="/community/article/list" :route="{ name: 'ArticleListView' }">科普文章</el-menu-item>
+          <el-menu-item index="/community/article/publish" :route="{ name: 'ArticlePublishView' }">
+            发布文章
+          </el-menu-item>
         </el-sub-menu>
       </el-menu>
     </div>

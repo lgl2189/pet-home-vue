@@ -19,3 +19,19 @@ export const getArticleList = (pageNum, pageSize) => {
 export const getArticleDetail = (articleId) => {
   return request.get(`/article/${articleId}`)
 }
+
+/**
+ * 发布文章
+ * @param {Object} articleData - 文章数据
+ * @param {number} articleData.publisher_id - 发布者ID
+ * @param {string} articleData.publish_date - 发布日期
+ * @param {string} articleData.content - 文章内容
+ * @returns {Promise<Object>} - 响应结果
+ */
+export const publishArticle = (articleData) => {
+  return request.post('/article', {
+    publisher_id: articleData.publisherId,
+    publish_date: articleData.publishDate,
+    content: articleData.content
+  })
+}

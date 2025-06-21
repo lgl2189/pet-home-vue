@@ -266,6 +266,11 @@ const router = createRouter({
           path: 'article/detail/:articleId',
           name: 'ArticleDetailView',
           component: () => import('@/views/community/ArticleDetailView.vue')
+        },
+        {
+          path: 'article/publish',
+          name: 'ArticlePublishView',
+          component: () => import('@/views/community/ArticlePublishView.vue')
         }
       ]
     }
