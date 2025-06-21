@@ -91,6 +91,10 @@
             发布文章
           </el-menu-item>
         </el-sub-menu>
+        <el-sub-menu index="6">
+          <template #title>交流</template>
+          <el-menu-item index="/chat" :route="{ name: 'UserChatView' }">消息</el-menu-item>
+        </el-sub-menu>
       </el-menu>
     </div>
     <div class="user">
