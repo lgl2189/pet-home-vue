@@ -223,7 +223,7 @@ const router = createRouter({
     },
     {
       path: '/donation',
-      requiresAuth: true,
+      meta: { requiresAuth: true },
       children: [
         {
           path: 'material',
