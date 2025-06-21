@@ -273,6 +273,12 @@ const router = createRouter({
           component: () => import('@/views/community/ArticlePublishView.vue')
         }
       ]
+    },
+    {
+      path: '/chat',
+      name: 'UserChatView',
+      component: () => import('@/views/chat/UserChatView.vue'),
+      meta: { requiresAuth: true }
     }
   ]
 })
