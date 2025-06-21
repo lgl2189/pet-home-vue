@@ -252,6 +252,22 @@ const router = createRouter({
           ]
         }
       ]
+    },
+    {
+      path: '/community',
+      meta: { requiresAuth: true },
+      children: [
+        {
+          path: 'article/list',
+          name: 'ArticleListView',
+          component: () => import('@/views/community/ArticleListView.vue')
+        },
+        {
+          path: 'article/detail/:articleId',
+          name: 'ArticleDetailView',
+          component: () => import('@/views/community/ArticleDetailView.vue')
+        }
+      ]
     }
   ]
 })

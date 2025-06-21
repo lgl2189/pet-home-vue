@@ -85,14 +85,8 @@
           </el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="5">
-          <template #title>展示</template>
-          <el-menu-item index="5-1">图片展示</el-menu-item>
-          <el-menu-item index="5-2">视频展示</el-menu-item>
-        </el-sub-menu>
-        <el-sub-menu index="6">
-          <template #title>数据</template>
-          <el-menu-item index="6-1">统计数据</el-menu-item>
-          <el-menu-item index="6-2">数据报表</el-menu-item>
+          <template #title>科普</template>
+          <el-menu-item index="/community/article" :route="{ name: 'ArticleListView' }">科普文章</el-menu-item>
         </el-sub-menu>
       </el-menu>
     </div>
