@@ -13,10 +13,10 @@
       if (res.status === '200') {
         articleDetail.value = res.data.article
       } else {
-        ElMessage.error('获取文章详情失败', res.message)
+        ElMessage.error('获取文章详情失败',+ res.message)
       }
     } catch (error) {
-      ElMessage.error('获取文章详情失败', error)
+      ElMessage.error('获取文章详情失败'+ error)
     }
   }
 

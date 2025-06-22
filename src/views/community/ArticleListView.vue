@@ -19,10 +19,10 @@
         pagination.value.total = res.data.page_info.record_num
         pagination.value.currentPage = res.data.page_info.page_num_now
       } else {
-        ElMessage.error('获取文章列表失败', error)
+        ElMessage.error('获取文章列表失败'+ error)
       }
     } catch (error) {
-      ElMessage.error('获取文章列表失败', error)
+      ElMessage.error('获取文章列表失败'+ error)
     }
   }
 
