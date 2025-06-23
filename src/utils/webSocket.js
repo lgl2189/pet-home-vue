@@ -49,8 +49,10 @@ export const getWebSocket = (webSocketUrl, customDataProcessor) => {
   watch(
     () => data,
     (newData) => {
-      dataProcessor(newData)
-    }
+      const resolvedData = JSON.parse(newData.value)
+      dataProcessor(resolvedData)
+    },
+    { deep: true }
   )
 
   return {

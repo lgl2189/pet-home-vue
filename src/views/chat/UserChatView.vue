@@ -1,9 +1,10 @@
 <script setup>
   import { ref, onBeforeMount, computed, nextTick, watch } from 'vue'
   import { useUserStore } from '@/stores/user'
-  import { getChatList, getMessageList, sendMessage } from '@/apis/chat'
+  import { addWebSocketRecallFuncation, getChatList, getMessageList, sendMessage } from '@/apis/chat'
   import { getPublicUserInfo } from '@/apis/user'
   import dayjs from 'dayjs'
+  import { MESSAGE_TYPE } from '@/utils/webSocketMessageType'
 
   // 响应式对象
   const userStore = useUserStore()
@@ -88,30 +89,70 @@
   }
 
   // 发送消息
-  const sendMessageAction = async () => {
+  const sendMessageAction = () => {
     if (!inputMessage.value.trim() || !selectedUser.value.userId) return
 
     const nowDate = Date.now()
-    const res = await sendMessage(currentUser.value.userId, selectedUser.value.userId, inputMessage.value, nowDate)
+    sendMessage(currentUser.value.userId, selectedUser.value.userId, inputMessage.value, nowDate)
+  }
 
-    if (res.status === '200') {
-      // 添加到消息列表
-      const newMessage = {
-        ...res.data.message,
-        isMe: true
-      }
-      messageListInfo.value.message_list.push(newMessage)
+  const receiveSendMessageAck = (data) => {
+    const message = JSON.parse(data.data)
+    // 添加到消息列表
+    const newMessage = {
+      message_id: message.messageId,
+      message_content: message.messageContent,
+      message_datetime: message.messageDatetime,
+      sender_id: message.senderId,
+      receiver_id: message.receiverId,
+      isMe: true
+    }
+    messageListInfo.value.message_list.push(newMessage)
 
-      // 更新用户列表中的最后一条消息
-      const userIndex = recentChatList.value.findIndex((user) => user.sender_id === selectedUser.value.userId)
-      if (userIndex !== -1) {
-        recentChatList.value[userIndex].message_content = res.data.message.message_content
-        recentChatList.value[userIndex].message_datetime = res.data.message.message_datetime
+    // 更新用户列表中的最后一条消息
+    const userIndex = recentChatList.value.findIndex((user) => user.sender_id === message.receiverId)
+    if (userIndex !== -1) {
+      recentChatList.value[userIndex].message_content = message.messageContent
+      recentChatList.value[userIndex].message_datetime = message.messageDatetime
+    }
+    inputMessage.value = ''
+    scrollToBottom()
+  }
+  const receiveSendMessagePrivate = (data) => {
+    const message = JSON.parse(data.data)
+    // 添加到消息列表
+    const newMessage = {
+      message_id: message.messageId,
+      message_content: message.messageContent,
+      message_datetime: message.messageDatetime,
+      sender_id: message.senderId,
+      receiver_id: message.receiverId,
+      isMe: false
+    }
+    messageListInfo.value.message_list.push(newMessage)
+
+    // 更新用户列表中的最后一条消息
+    const userIndex = recentChatList.value.findIndex((user) => user.sender_id === message.senderId)
+    if (userIndex !== -1) {
+      recentChatList.value[userIndex].message_content = message.messageContent
+      recentChatList.value[userIndex].message_datetime = message.messageDatetime
+    }
+    inputMessage.value = ''
+    scrollToBottom()
+  }
+
+  const receiveMessageAction = (data) => {
+    switch (data.type) {
+      // 200 接收单独消息
+      case MESSAGE_TYPE.PRIVATE_MESSAGE: {
+        receiveSendMessagePrivate(data)
+        break
       }
-      inputMessage.value = ''
-      scrollToBottom()
-    } else {
-      ElMessage.error('发送消息失败:' + res.message)
+      // 203 接收消息回执
+      case MESSAGE_TYPE.MESSAGE_ACK: {
+        receiveSendMessageAck(data)
+        break
+      }
     }
   }
 
@@ -132,6 +173,7 @@
 
   // 生命周期函数
   onBeforeMount(async () => {
+    addWebSocketRecallFuncation(receiveMessageAction)
     await initCurrentUser()
     await fetchUserList()
   })
