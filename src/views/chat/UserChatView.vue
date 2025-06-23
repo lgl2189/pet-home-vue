@@ -65,6 +65,9 @@
     }
     await fetchMessageList(newselectUser.sender_id)
     messageScrollSwitch.value = true
+    nextTick(() => {
+      scrollToBottom()
+    })
   }
 
   // 获取消息记录
