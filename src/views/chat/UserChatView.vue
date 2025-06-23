@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, onBeforeMount, computed } from 'vue'
+  import { ref, onBeforeMount, computed, nextTick, watch } from 'vue'
   import { useUserStore } from '@/stores/user'
   import { getChatList, getMessageList, sendMessage } from '@/apis/chat'
   import { getPublicUserInfo } from '@/apis/user'
@@ -54,6 +54,9 @@
 
   // 选择用户
   const selectUser = async (newselectUser) => {
+    if (newselectUser.sender_id === selectedUser.value?.userId) {
+      return
+    }
     messageScrollSwitch.value = false
     selectedUser.value = {
       userId: newselectUser.sender_id,
@@ -73,7 +76,6 @@
         messageListInfo.value.message_list.forEach((message) => {
           message.isMe = message.sender_id == userStore.userId
         })
-        // scrollToBottom()
       } else {
         ElMessage.error('获取消息记录失败:' + res.message)
       }
@@ -86,54 +88,50 @@
   const sendMessageAction = async () => {
     if (!inputMessage.value.trim() || !selectedUser.value.userId) return
 
-    try {
-      const nowDate = Date.now()
-      const res = await sendMessage(currentUser.value.userId, selectedUser.value.userId, inputMessage.value, nowDate)
+    const nowDate = Date.now()
+    const res = await sendMessage(currentUser.value.userId, selectedUser.value.userId, inputMessage.value, nowDate)
 
-      if (res.status === '200') {
-        // 添加到消息列表
-        const newMessage = {
-          ...res.data.message,
-          isMe: true
-        }
-        messageListInfo.value.message_list.push(newMessage)
-
-        // scrollToBottom()
-
-        // 更新用户列表中的最后一条消息
-        const userIndex = recentChatList.value.findIndex((user) => user.sender_id === selectedUser.value.userId)
-        if (userIndex !== -1) {
-          recentChatList.value[userIndex].message_content = res.data.message.message_content
-          recentChatList.value[userIndex].message_datetime = res.data.message.message_datetime
-        }
-        inputMessage.value = ''
-      } else {
-        ElMessage.error('发送消息失败:' + res.message)
+    if (res.status === '200') {
+      // 添加到消息列表
+      const newMessage = {
+        ...res.data.message,
+        isMe: true
       }
-    } catch (error) {
-      ElMessage.error('发送消息失败:' + error)
+      messageListInfo.value.message_list.push(newMessage)
+
+      // 更新用户列表中的最后一条消息
+      const userIndex = recentChatList.value.findIndex((user) => user.sender_id === selectedUser.value.userId)
+      if (userIndex !== -1) {
+        recentChatList.value[userIndex].message_content = res.data.message.message_content
+        recentChatList.value[userIndex].message_datetime = res.data.message.message_datetime
+      }
+      inputMessage.value = ''
+      scrollToBottom()
+    } else {
+      ElMessage.error('发送消息失败:' + res.message)
     }
   }
 
   // 滚动到底部
-  // const scrollToBottom = () => {
-  //   setTimeout(() => {
-  //     if (messageScrollbarRef.value) {
-  //       messageScrollbarRef.value.wrap.scrollTop = messageScrollbarRef.value.wrap.scrollHeight
-  //     }
-  //   }, 100)
-  // }
+  const scrollToBottom = () => {
+    const wrapRef = messageScrollbarRef.value?.wrapRef
+    if (wrapRef) {
+      nextTick(() => {
+        wrapRef.scrollTop = wrapRef.scrollHeight - wrapRef.clientHeight
+      })
+    }
+  }
+
+  // 监听消息列表变化，自动滚动到底部
+  watch(messageList, () => {
+    scrollToBottom()
+  })
 
   // 生命周期函数
   onBeforeMount(async () => {
     await initCurrentUser()
     await fetchUserList()
   })
-
-  // 监听消息列表变化，自动滚动到底部
-  // watch(messageList, () => {
-  //   scrollToBottom()
-  // })
 </script>
 <template>
   <div class="user-chat-view-container">
@@ -201,10 +199,11 @@
         <el-input
           v-model="inputMessage"
           type="textarea"
-          :rows="6"
+          :rows="5"
           placeholder="请输入消息..."
           @keyup.enter="sendMessageAction"
-          @keydown.enter.prevent></el-input>
+          @keydown.enter.prevent
+          input-style="font-size:16px;"></el-input>
         <div class="button-group">
           <el-button size="default" @click="sendMessageAction">发送</el-button>
         </div>
@@ -215,10 +214,11 @@
 
 <style lang="less" scoped>
   .user-chat-view-container {
+    box-sizing: border-box;
     display: flex;
-    height: 90vh;
+    height: calc(100vh - 80px);
     background-color: #f5f7fa;
-    padding-bottom: 50px;
+    padding-bottom: 10px;
 
     .left-sidebar {
       width: 300px;
@@ -330,6 +330,7 @@
         flex: 1;
         overflow-y: auto;
         padding: 20px;
+        font-size: 14px;
 
         .messages-container {
           display: flex;
