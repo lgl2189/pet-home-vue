@@ -186,7 +186,7 @@
             <el-upload v-model:file-list="animalInfo.vaccination_record_array" :auto-upload="false">
               <el-button size="small" type="primary">点击上传</el-button>
               <template v-slot:tip>
-                <div class="el-upload__tip">只能上传图片文件，且不超过10MB</div>
+                <div class="el-upload__tip">只能上传PDF文件，且不超过10MB</div>
               </template>
             </el-upload>
           </el-form-item>
@@ -195,7 +195,7 @@
             <el-upload v-model:file-list="animalInfo.deworming_record_array" :auto-upload="false">
               <el-button size="small" type="primary">点击上传</el-button>
               <template v-slot:tip>
-                <div class="el-upload__tip">只能上传图片文件，且不超过10MB</div>
+                <div class="el-upload__tip">只能上传PDF文件，且不超过10MB</div>
               </template>
             </el-upload>
           </el-form-item>
