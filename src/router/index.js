@@ -7,7 +7,8 @@ const router = createRouter({
     {
       path: '/',
       name: 'HomeView',
-      component: () => import('@/views/home/HomeView.vue')
+      component: () => import('@/views/home/HomeView.vue'),
+      redirect: { name: 'AnimalSearchView' }
     },
     {
       path: '/user',
