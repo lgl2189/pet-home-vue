@@ -67,3 +67,7 @@ export const updateUserRoleList = (userId, roleList) => {
 export const getVolunteerInfo = (userId) => {
   return request.get(`/user/${userId}/volunteer`)
 }
+
+export const searchUserByName = (keyword) => {
+  return request.get(`/user/search?keyword=${keyword}`)
+}
